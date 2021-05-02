@@ -7,6 +7,16 @@ public class ScreenAreaRecord extends AbstractRecord {
     private final Path filePath;
     private final Rectangle windowSize;
 
+    public ScreenAreaRecord(Path filePath) {
+        this.filePath = filePath;
+        this.windowSize = new Rectangle(
+                0,
+                0,
+                Toolkit.getDefaultToolkit().getScreenSize().width,
+                Toolkit.getDefaultToolkit().getScreenSize().height
+        );
+    }
+
     public ScreenAreaRecord(Path filePath, Rectangle windowSize) {
         this.filePath = filePath;
         this.windowSize = windowSize;
@@ -18,12 +28,12 @@ public class ScreenAreaRecord extends AbstractRecord {
     }
 
     @Override
-    public boolean equals(Object obj){
+    public boolean equals(Object obj) {
         return obj instanceof AbstractRecord;
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return AbstractRecord.class.getName().hashCode();
     }
 }

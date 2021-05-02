@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AbstractRecord {
     private final static ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final double FRAME_RATE = 15;
+    protected final double FRAME_RATE = 15;
     public final AtomicBoolean IS_RECORD = new AtomicBoolean(false);
 
     abstract public void record();

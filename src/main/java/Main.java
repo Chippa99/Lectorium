@@ -1,3 +1,10 @@
+import NewStructure.Recorders.FileRecord;
+import NewStructure.Sources.BaseSource;
+import NewStructure.Recorders.AbstractRecord;
+import NewStructure.Sources.PresentationSource;
+import NewStructure.Sources.ScreenAreaSource;
+import Presentation.SlideController;
+import Presentation.SlidePanel;
 import Utils.RecordUtils;
 
 import javax.swing.*;
@@ -7,11 +14,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import Record.*;
 
 public class Main extends JFrame {
+    private static final Path PATH_TO_PRESENTATIONS = Paths.get("presentations").toAbsolutePath();
+    private Path recordFilePath = RecordUtils.getFreeFileName(Paths.get("record.mp4").toAbsolutePath());
+    private static final SlideController controller = new SlideController(PATH_TO_PRESENTATIONS);
     private JButton start;
     private JButton stop;
     private JPanel mainPanel;
@@ -19,7 +26,7 @@ public class Main extends JFrame {
     private JButton path;
     private JRadioButton screenRadioButton;
     private JRadioButton partOfScreenRadioButton;
-    private JRadioButton twichRadioButton;
+    private JRadioButton twitchRadioButton;
     private JPanel screenSettingsPanel;
     private JRadioButton fullScreenRadioButton;
     private JRadioButton screenAreaRadioButton;
@@ -27,11 +34,20 @@ public class Main extends JFrame {
     private JLabel twitchRec;
     private JLabel projectorRec;
     private JLabel screenRec;
-    private Path recordFilePath = RecordUtils.getFreeFileName(Paths.get("record.mp4").toAbsolutePath());
-    private final List<AbstractRecord> recordList = new ArrayList<>();
+    private JRadioButton presentationMode;
+    private SlidePanel slidePanel;
+
+    private BaseSource baseSource;
+    private final List<AbstractRecord> recordersList = new ArrayList<>();
+    private AbstractRecord recorder;
     private Point firstMousePoint;
     private Point secondMousePoint;
     private JFrame transFrame;
+    private JButton previousSlideButton;
+    private JButton nextSlideButton;
+    private JPanel tmpPanel;
+    private JList presentationsList;
+    private JLabel slideLable;
 
     public Main() {
         start.addActionListener(new ActionListener() {
@@ -40,11 +56,13 @@ public class Main extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        if (!recordList.isEmpty()) {
-                            recordList.forEach(record -> {
-                                record.record();
-                                recordDebugUpdate(record);
+                        if (!recordersList.isEmpty()) {
+                            recordersList.forEach(record -> {
+                                record.record(recordFilePath);
+                                //recordDebugUpdate(record);
                             });
+                            stop.setEnabled(true);
+                            start.setEnabled(false);
                         }
                     }
                 });
@@ -53,13 +71,13 @@ public class Main extends JFrame {
         stop.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                recordList.forEach(record -> {
-                    if (record.IS_RECORD.get()) {
-                        record.stop();
-                        recordDebugUpdate(record);
-                        recordFilePath = RecordUtils.getFreeFileName(recordFilePath.toAbsolutePath());
-                    }
+                recordersList.forEach(record -> {
+                    record.stop();
+                    recordFilePath = RecordUtils.getFreeFileName(recordFilePath.toAbsolutePath());
                 });
+                recordFilePath = RecordUtils.getFreeFileName(recordFilePath.toAbsolutePath());
+                stop.setEnabled(false);
+                start.setEnabled(true);
             }
         });
         path.addActionListener(new ActionListener() {
@@ -87,9 +105,9 @@ public class Main extends JFrame {
         fullScreenRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FullScreenRecord record = new FullScreenRecord(recordFilePath);
-                recordList.remove(record);
-                recordList.add(record);
+                BaseSource source = new ScreenAreaSource();
+                AbstractRecord record = new FileRecord(source);
+                replaceRecordMode(record);
             }
         });
         screenAreaRadioButton.addActionListener(new ActionListener() {
@@ -111,6 +129,7 @@ public class Main extends JFrame {
 
                     @Override
                     public void mouseReleased(MouseEvent e) {
+
                         secondMousePoint = e.getLocationOnScreen();
                         Rectangle rec = new Rectangle(
                                 firstMousePoint.x,
@@ -118,10 +137,13 @@ public class Main extends JFrame {
                                 e.getLocationOnScreen().x - firstMousePoint.x,
                                 e.getLocationOnScreen().y - firstMousePoint.y
                         );
+                        BaseSource source = new ScreenAreaSource(rec);
+                        AbstractRecord record = new FileRecord(source);
+                        replaceRecordMode(record);
                         //TODO create blank form
-                        ScreenAreaRecord record = new ScreenAreaRecord(recordFilePath, rec);
-                        recordList.remove(record);
-                        recordList.add(record);
+                        // ScreenAreaRecord record = new ScreenAreaRecord(recordFilePath, rec);
+                        // recordList.remove(record);
+                        //  recordList.add(record);
                         transFrame.dispatchEvent(new WindowEvent(transFrame, WindowEvent.WINDOW_CLOSING));
                     }
 
@@ -150,19 +172,44 @@ public class Main extends JFrame {
 
                     @Override
                     public void mouseMoved(MouseEvent e) {
-
                     }
                 });
                 transFrame.show();
                 pack();
             }
         });
+        presentationMode.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BaseSource source = new PresentationSource(controller);
+                AbstractRecord record = new FileRecord(source);
+                replaceRecordMode(record);
+                previousSlideButton.setVisible(!previousSlideButton.isVisible());
+                nextSlideButton.setVisible(!nextSlideButton.isVisible());
+                tmpPanel.setVisible(!tmpPanel.isVisible());
+            }
+        });
+        previousSlideButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ((SlidePanel) tmpPanel).setImage(controller.prevSlide());
+                tmpPanel.repaint();
+            }
+        });
+        nextSlideButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ((SlidePanel) tmpPanel).setImage(controller.nextSlide());
+                tmpPanel.repaint();
+            }
+        });
         textPath.setText("Paths to record file :" + recordFilePath);
-
+        //  presentationsList.add
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(fullScreenRadioButton);
         buttonGroup.add(screenAreaRadioButton);
         buttonGroup.add(windowCaptureRadioButton);
+        buttonGroup.add(presentationMode);
 
         setContentPane(mainPanel);
         setResizable(false);
@@ -172,13 +219,14 @@ public class Main extends JFrame {
     }
 
     private void recordDebugUpdate(AbstractRecord record) {
-        if (record instanceof FullScreenRecord || record instanceof ScreenAreaRecord) {
-            if (record.IS_RECORD.get())
-                screenRec.setText("Rec");
-            else
-                screenRec.setText("Not rec");
-            repaint();
-        } /*else if (record instanceof ) {
+//        if (record instanceof ScreenAreaRecord) {
+//            if (record.IS_RECORD.get())
+//                screenRec.setText("Rec");
+//            else
+//                screenRec.setText("Not rec");
+//            repaint();
+//        }
+        /*else if (record instanceof ) {
                 if (record.IS_RECORD.get())
                     screenRec.setBackground(Color.GREEN);
                 else
@@ -208,5 +256,14 @@ public class Main extends JFrame {
 
     public static void main(String[] args) {
         new Main().show();
+    }
+
+    private void createUIComponents() {
+        tmpPanel = new SlidePanel(controller.currentSlide());
+    }
+
+    public void replaceRecordMode(AbstractRecord record) {
+        recordersList.remove(record);
+        recordersList.add(record);
     }
 }
