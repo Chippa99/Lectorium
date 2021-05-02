@@ -8,9 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/NewStructure/Recorders/AbstractRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/NewStructure/Recorders/AbstractRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/NewStructure/Recorders/FileRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/NewStructure/Recorders/FileRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/NewStructure/Sources/ScreenAreaSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/NewStructure/Sources/ScreenAreaSource.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,7 +181,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>109</line>
+          <line>107</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-field">

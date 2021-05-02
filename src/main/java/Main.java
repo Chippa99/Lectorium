@@ -46,7 +46,7 @@ public class Main extends JFrame {
     private JButton previousSlideButton;
     private JButton nextSlideButton;
     private JPanel tmpPanel;
-    private JList presentationsList;
+    private JComboBox presentationsList;
     private JLabel slideLable;
 
     public Main() {
@@ -140,10 +140,6 @@ public class Main extends JFrame {
                         BaseSource source = new ScreenAreaSource(rec);
                         AbstractRecord record = new FileRecord(source);
                         replaceRecordMode(record);
-                        //TODO create blank form
-                        // ScreenAreaRecord record = new ScreenAreaRecord(recordFilePath, rec);
-                        // recordList.remove(record);
-                        //  recordList.add(record);
                         transFrame.dispatchEvent(new WindowEvent(transFrame, WindowEvent.WINDOW_CLOSING));
                     }
 
@@ -187,6 +183,7 @@ public class Main extends JFrame {
                 previousSlideButton.setVisible(!previousSlideButton.isVisible());
                 nextSlideButton.setVisible(!nextSlideButton.isVisible());
                 tmpPanel.setVisible(!tmpPanel.isVisible());
+                presentationsList.setVisible(!presentationsList.isVisible());
             }
         });
         previousSlideButton.addActionListener(new ActionListener() {
@@ -204,7 +201,18 @@ public class Main extends JFrame {
             }
         });
         textPath.setText("Paths to record file :" + recordFilePath);
-        //  presentationsList.add
+        controller.getPresentationsNames().forEach(name -> {
+            presentationsList.addItem(name);
+        });
+        presentationsList.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.setCurrentPresentation(presentationsList.getSelectedItem().toString());
+                ((SlidePanel) tmpPanel).setImage(controller.currentSlide());
+                tmpPanel.repaint();
+            }
+        });
+
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(fullScreenRadioButton);
         buttonGroup.add(screenAreaRadioButton);
@@ -216,28 +224,6 @@ public class Main extends JFrame {
         setMinimumSize(new Dimension(650, 400));
         setSize(650, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-
-    private void recordDebugUpdate(AbstractRecord record) {
-//        if (record instanceof ScreenAreaRecord) {
-//            if (record.IS_RECORD.get())
-//                screenRec.setText("Rec");
-//            else
-//                screenRec.setText("Not rec");
-//            repaint();
-//        }
-        /*else if (record instanceof ) {
-                if (record.IS_RECORD.get())
-                    screenRec.setBackground(Color.GREEN);
-                else
-                    screenRec.setBackground(Color.RED);
-
-            } else if (record instanceof FullScreenRecord) {
-                if (record.IS_RECORD.get())
-                    screenRec.setBackground(Color.GREEN);
-                else
-                    screenRec.setBackground(Color.RED);
-            }*/
     }
 
     private JFrame createTransparentFrame(Point loc, Dimension size) {
