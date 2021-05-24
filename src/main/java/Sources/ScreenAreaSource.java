@@ -1,4 +1,4 @@
-package NewStructure.Sources;
+package Sources;
 
 import Utils.RecordUtils;
 

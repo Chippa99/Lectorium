@@ -1,24 +1,36 @@
-import NewStructure.Recorders.FileRecord;
-import NewStructure.Sources.BaseSource;
-import NewStructure.Recorders.AbstractRecord;
-import NewStructure.Sources.PresentationSource;
-import NewStructure.Sources.ScreenAreaSource;
+import ApiYoutube.AuthYoutube;
+import ApiYoutube.BroadcastCreator;
+import Recorders.FileRecord;
+import Sources.BaseSource;
+import Recorders.AbstractRecord;
+import Sources.PresentationSource;
+import Sources.ScreenAreaSource;
 import Presentation.SlideController;
 import Presentation.SlidePanel;
 import Utils.RecordUtils;
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.services.youtube.YouTubeScopes;
+import io.opencensus.common.Scope;
+import org.apache.log4j.BasicConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main extends JFrame {
+    private static final  Logger log = LoggerFactory.getLogger(Main.class);
     private static final Path PATH_TO_PRESENTATIONS = Paths.get("presentations").toAbsolutePath();
+    private static final SlideController CONTROLLER = new SlideController(PATH_TO_PRESENTATIONS);
+
     private Path recordFilePath = RecordUtils.getFreeFileName(Paths.get("record.mp4").toAbsolutePath());
-    private static final SlideController controller = new SlideController(PATH_TO_PRESENTATIONS);
     private JButton start;
     private JButton stop;
     private JPanel mainPanel;
@@ -50,6 +62,8 @@ public class Main extends JFrame {
     private JLabel slideLable;
 
     public Main() {
+        BasicConfigurator.configure();
+        log.info("Start tool");
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -177,7 +191,7 @@ public class Main extends JFrame {
         presentationMode.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BaseSource source = new PresentationSource(controller);
+                BaseSource source = new PresentationSource(CONTROLLER);
                 AbstractRecord record = new FileRecord(source);
                 replaceRecordMode(record);
                 previousSlideButton.setVisible(!previousSlideButton.isVisible());
@@ -189,27 +203,34 @@ public class Main extends JFrame {
         previousSlideButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ((SlidePanel) tmpPanel).setImage(controller.prevSlide());
+                ((SlidePanel) tmpPanel).setImage(CONTROLLER.prevSlide());
                 tmpPanel.repaint();
             }
         });
         nextSlideButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ((SlidePanel) tmpPanel).setImage(controller.nextSlide());
+                ((SlidePanel) tmpPanel).setImage(CONTROLLER.nextSlide());
                 tmpPanel.repaint();
             }
         });
         textPath.setText("Paths to record file :" + recordFilePath);
-        controller.getPresentationsNames().forEach(name -> {
+        CONTROLLER.getPresentationsNames().forEach(name -> {
             presentationsList.addItem(name);
         });
         presentationsList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.setCurrentPresentation(presentationsList.getSelectedItem().toString());
-                ((SlidePanel) tmpPanel).setImage(controller.currentSlide());
+                CONTROLLER.setCurrentPresentation(presentationsList.getSelectedItem().toString());
+                ((SlidePanel) tmpPanel).setImage(CONTROLLER.currentSlide());
                 tmpPanel.repaint();
+            }
+        });
+        twitchRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO
+                BroadcastCreator.main(new String[]{""});
             }
         });
 
@@ -245,11 +266,13 @@ public class Main extends JFrame {
     }
 
     private void createUIComponents() {
-        tmpPanel = new SlidePanel(controller.currentSlide());
+        tmpPanel = new SlidePanel(CONTROLLER.currentSlide());
     }
 
     public void replaceRecordMode(AbstractRecord record) {
         recordersList.remove(record);
         recordersList.add(record);
+
+        log.info("Add new record mode {} to records, size: {}", record.getClass(), recordersList.size());
     }
 }

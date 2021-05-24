@@ -1,8 +1,7 @@
-package NewStructure.Recorders;
+package Recorders;
 
 
-import NewStructure.Sources.BaseSource;
-import Utils.RecordUtils;
+import Sources.BaseSource;
 import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
 import com.xuggle.xuggler.ICodec;

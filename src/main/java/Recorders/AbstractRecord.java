@@ -1,6 +1,6 @@
-package NewStructure.Recorders;
+package Recorders;
 
-import NewStructure.Sources.BaseSource;
+import Sources.BaseSource;
 
 import java.nio.file.Path;
 import java.util.concurrent.ExecutorService;
@@ -22,9 +22,7 @@ public abstract class AbstractRecord {
         start(output);
     }
 
-
-
-    abstract void start(Path outputFilename);
+    public abstract void start(Path outputFilename);
 
     public void stop() {
         IS_RECORD.set(false);
