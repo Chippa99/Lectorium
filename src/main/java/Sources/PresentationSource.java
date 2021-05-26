@@ -14,6 +14,16 @@ public class PresentationSource implements BaseSource {
     }
 
     @Override
+    public int getX() {
+        return 0;
+    }
+
+    @Override
+    public int getY() {
+        return 0;
+    }
+
+    @Override
     public BufferedImage getImage() {
         try {
             return ImageIO.read(controller.currentSlide().toFile());

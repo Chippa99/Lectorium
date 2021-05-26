@@ -22,6 +22,16 @@ public class ScreenAreaSource implements BaseSource {
     }
 
     @Override
+    public int getX() {
+        return rectangle.x;
+    }
+
+    @Override
+    public int getY() {
+        return rectangle.y;
+    }
+
+    @Override
     public BufferedImage getImage() {
         BufferedImage screen = RecordUtils.getDesktopScreenshot(rectangle);
         return RecordUtils.convertToType(screen, BufferedImage.TYPE_3BYTE_BGR);

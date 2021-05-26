@@ -2,6 +2,8 @@ package Sources;
 
 import java.awt.image.BufferedImage;
 
-public interface BaseSource {
+public  interface BaseSource {
+    int getX();
+    int getY();
     BufferedImage getImage();
 }

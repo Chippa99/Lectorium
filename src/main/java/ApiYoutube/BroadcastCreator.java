@@ -40,7 +40,7 @@ public class BroadcastCreator {
             broadcastSnippet.setScheduledEndTime(new DateTime(now.plus(2, ChronoUnit.DAYS).toEpochMilli()));
 
             LiveBroadcastStatus status = new LiveBroadcastStatus();
-            status.setPrivacyStatus("public");
+            status.setPrivacyStatus("private");
 
             LiveBroadcast broadcast = new LiveBroadcast();
             broadcast.setKind("youtube#liveBroadcast");

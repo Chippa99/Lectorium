@@ -5,30 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="835bb7a0-1afe-4219-9c95-5f7d5aacfb91" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/twitch_api_wrapper_0_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ApiYoutube/AuthYoutube.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ApiYoutube/BroadcastCreator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ApiYoutube/RTMPEncoder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/client_secret.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ApiYoutube/StreamExecutor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/LectoriumThreadExecutor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/MicrophoneAudioCapture.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Lectorium.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Lectorium.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ApiYoutube/RTMPEncoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ApiYoutube/RTMPEncoder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/NewStructure/Recorders/AbstractRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Recorders/AbstractRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/NewStructure/Recorders/FileRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Recorders/FileRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/NewStructure/Sources/BaseSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Sources/BaseSource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/NewStructure/Sources/PresentationSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Sources/PresentationSource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/NewStructure/Sources/ScreenAreaSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Sources/ScreenAreaSource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Record/AbstractRecord.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Record/PresentationRecord.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Record/ScreenAreaRecord.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Recorders/AbstractRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Recorders/AbstractRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Recorders/FileRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Recorders/FileRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Sources/BaseSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Sources/BaseSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Sources/PresentationSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Sources/PresentationSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Sources/ScreenAreaSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Sources/ScreenAreaSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/RecordUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/RecordUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +103,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="UI_DESIGNER_EDITOR_MODE.PaletteManager.WIDTH" value="280" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../rtmp-rtsp-stream-client-java/rtmp" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -120,22 +114,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.BroadcastCreator">
-    <configuration name="AuthorizationYoutube" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="ALTERNATIVE_JRE_PATH" value="openjdk-15" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="ApiYoutube.AuthorizationYoutube" />
-      <module name="Lectorium.main" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ApiYoutube.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Application.Main">
     <configuration name="BroadcastCreator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-15" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -151,19 +130,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="LectoriumMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-15" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="LectoriumMain" />
+      <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Lectorium.main" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="TestServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-15" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="Main" />
+      <option name="MAIN_CLASS_NAME" value="TestServer" />
       <module name="Lectorium.main" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -177,7 +156,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Lectorium [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Lectorium [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -188,7 +167,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="clean" />
+            <option value="build" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -219,21 +198,42 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="Lectorium [wrapper1]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="wrapper1" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Application.Main" />
-      <item itemvalue="Application.LectoriumMain" />
-      <item itemvalue="Application.AuthorizationYoutube" />
       <item itemvalue="Application.BroadcastCreator" />
+      <item itemvalue="Application.TestServer" />
       <item itemvalue="Gradle.Lectorium [dependencies]" />
-      <item itemvalue="Gradle.Lectorium [clean]" />
+      <item itemvalue="Gradle.Lectorium [build]" />
+      <item itemvalue="Gradle.Lectorium [wrapper1]" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.BroadcastCreator" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="Application.AuthorizationYoutube" />
-        <item itemvalue="Gradle.Lectorium [clean]" />
-        <item itemvalue="Application.LectoriumMain" />
+        <item itemvalue="Application.TestServer" />
+        <item itemvalue="Application.BroadcastCreator" />
+        <item itemvalue="Gradle.Lectorium [build]" />
+        <item itemvalue="Gradle.Lectorium [wrapper1]" />
       </list>
     </recent_temporary>
   </component>
@@ -264,24 +264,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>72</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Recorders/FileRecord.java</url>
-          <line>21</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Sources/PresentationSource.java</url>
-          <line>18</line>
+          <line>28</line>
           <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>121</line>
-          <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>jar://$PROJECT_DIR$/libs/twitch-api-wrapper-0.3-jar-with-dependencies.jar!/com/mb3364/twitch/api/resources/GamesResource.class</url>
@@ -289,12 +274,77 @@
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/ApiYoutube/RTMPEncoder.java</url>
-          <line>28</line>
-          <option name="timeStamp" value="37" />
+          <url>file://$PROJECT_DIR$/src/main/java/ApiYoutube/StreamExecutor.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="42" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Recorders/FileRecord.java</url>
+          <line>50</line>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-core/1.38.0/47a265d9860af62de2174cf593c388d2c609e318/grpc-core-1.38.0-sources.jar!/io/grpc/internal/ServerImpl.java</url>
+          <line>596</line>
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-core/1.38.0/47a265d9860af62de2174cf593c388d2c609e318/grpc-core-1.38.0-sources.jar!/io/grpc/internal/ServerImpl.java</url>
+          <line>574</line>
+          <option name="timeStamp" value="49" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-core/1.38.0/47a265d9860af62de2174cf593c388d2c609e318/grpc-core-1.38.0-sources.jar!/io/grpc/internal/ServerImpl.java</url>
+          <line>524</line>
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.38.0/1e022827602a9e5e631c87ee4e0a0152c8695580/grpc-netty-shaded-1.38.0.jar!/io/grpc/netty/shaded/io/netty/channel/ReflectiveChannelFactory.class</url>
+          <line>26</line>
+          <option name="timeStamp" value="53" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.38.0/1e022827602a9e5e631c87ee4e0a0152c8695580/grpc-netty-shaded-1.38.0.jar!/io/grpc/netty/shaded/io/netty/handler/codec/http2/DefaultHttp2FrameReader.class</url>
+          <line>75</line>
+          <option name="timeStamp" value="54" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-http2/4.1.63.Final/8578bf22f1becdd67f3d1c1cf1b0f9a5aff676e/netty-codec-http2-4.1.63.Final-sources.jar!/io/netty/handler/codec/http2/DefaultHttp2ConnectionDecoder.java</url>
+          <line>180</line>
+          <option name="timeStamp" value="55" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-http2/4.1.63.Final/8578bf22f1becdd67f3d1c1cf1b0f9a5aff676e/netty-codec-http2-4.1.63.Final-sources.jar!/io/netty/handler/codec/http2/Http2ConnectionHandler.java</url>
+          <line>377</line>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-http2/4.1.63.Final/8578bf22f1becdd67f3d1c1cf1b0f9a5aff676e/netty-codec-http2-4.1.63.Final-sources.jar!/io/netty/handler/codec/http2/Http2ConnectionHandler.java</url>
+          <line>240</line>
+          <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-http/4.1.63.Final/99467414b27a41fd34ab85066953195d9a6dc93e/netty-codec-http-4.1.63.Final-sources.jar!/io/netty/handler/codec/http/HttpServerCodec.java</url>
+          <line>122</line>
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.ArithmeticException" package="java.lang" />
+          <option name="timeStamp" value="46" />
+        </breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="java.lang.ProcessBuilder" memberName="command" />
+      </pinned-members>
+    </pin-to-top-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="((ServerImpl)((ServerListenerImpl)serverListener).this$0).registry" custom="io.grpc.internal.ServerImpl,io.grpc.internal.ServerImpl.ServerListenerImpl" />
+        <watch expression="((PooledUnsafeDirectByteBuf)byteBuf).memory" custom="io.grpc.netty.shaded.io.netty.buffer.PooledUnsafeDirectByteBuf" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Lectorium$Main.ic" NAME="Main Coverage Results" MODIFIED="1619960713439" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

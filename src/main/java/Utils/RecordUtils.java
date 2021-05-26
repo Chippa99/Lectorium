@@ -33,8 +33,7 @@ public class RecordUtils {
     public static BufferedImage getDesktopScreenshot(Rectangle screenBounds) {
         try {
             Robot robot = new Robot();
-            Rectangle captureSize = new Rectangle(screenBounds);
-            return robot.createScreenCapture(captureSize);
+            return robot.createScreenCapture(screenBounds);
         } catch (AWTException e) {
             e.printStackTrace();
             return null;
