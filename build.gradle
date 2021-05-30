@@ -25,15 +25,10 @@ dependencies {
     implementation group: 'com.google.http-client', name: 'google-http-client-jackson2', version: '1.20.0'
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.22.0'
     implementation group: 'com.google.apis', name: 'google-api-services-youtube', version: 'v3-rev222-1.25.0'
-    implementation 'io.netty:netty-codec-http2:4.1.63.Final'
-    implementation 'commons-codec:commons-codec:1.15'
-    implementation group: 'io.grpc', name: 'grpc-protobuf', version: '1.38.0'
-    implementation group: 'io.grpc', name: 'grpc-stub', version: '1.38.0'
-    compileOnly "org.apache.tomcat:annotations-api:6.0.53"
-    implementation group: 'io.grpc', name: 'grpc-netty-shaded', version: '1.38.0'
-    implementation group: 'io.grpc', name: 'grpc-netty', version: '1.38.0'
-    implementation group: 'io.grpc', name: 'grpc-api', version: '1.38.0'
-    implementation group: 'io.grpc', name: 'grpc-core', version: '1.38.0'
+    implementation group: 'net.java.dev.jna', name: 'jna-platform', version: '5.5.0'
+    implementation group: 'net.java.dev.jna', name: 'jna', version: '5.8.0'
+
+
 }
 
 test {

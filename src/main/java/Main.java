@@ -1,12 +1,10 @@
-import ApiYoutube.StreamExecutor;
-import Recorders.FileRecord;
-import Sources.BaseSource;
+import Recorders.ProcessExecutor;
+import Sources.*;
 import Recorders.AbstractRecord;
-import Sources.PresentationSource;
-import Sources.ScreenAreaSource;
 import Presentation.SlideController;
 import Presentation.SlidePanel;
 import Utils.RecordUtils;
+import Utils.WindowsInfo;
 import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +17,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Utils.RecordUtils.getScreenSize;
+
 public class Main extends JFrame {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
     private static final Path PATH_TO_PRESENTATIONS = Paths.get("presentations").toAbsolutePath();
     private static final SlideController CONTROLLER = new SlideController(PATH_TO_PRESENTATIONS);
 
-    private enum SOURCE_TYPE {FULL, AREA, PRESENTATION}
+    private enum SOURCE_TYPE {NONE, FULL, AREA, CAPTURE_FRAME, PRESENTATION}
 
     private Path recordFilePath = RecordUtils.getFreeFileName(Paths.get("record.mp4").toAbsolutePath());
     private JButton start;
@@ -33,16 +33,16 @@ public class Main extends JFrame {
     private JLabel textPath;
     private JButton path;
     private JRadioButton screenRadioButton;
-    private JRadioButton partOfScreenRadioButton;
+    private JRadioButton projectorRadioButton;
     private JRadioButton twitchRadioButton;
     private JLabel twitchRec;
     private JLabel projectorRec;
     private JLabel screenRec;
     private SlidePanel slidePanel;
 
-    private BaseSource baseSource = new ScreenAreaSource();
     private final List<AbstractRecord> recordersList = new ArrayList<>();
-    private AbstractRecord recorder;
+    private final List<ProcessExecutor> executors = new ArrayList<>();
+    private RecordSource recordSource = new RecordSource(getScreenSize());
     private Point firstMousePoint;
     private Point secondMousePoint;
     private JFrame transFrame;
@@ -51,8 +51,8 @@ public class Main extends JFrame {
     private JPanel tmpPanel;
     private JComboBox presentationsList;
     private JComboBox sourceType;
+    private JLabel presText;
     private JLabel slideLable;
-    private StreamExecutor streamExecutor;
 
     public Main() {
         BasicConfigurator.configure();
@@ -63,11 +63,12 @@ public class Main extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        if (!recordersList.isEmpty()) {
-                            recordersList.forEach(record -> {
-                                record.record(recordFilePath);
-                                //recordDebugUpdate(record);
-                            });
+                        if (!executors.isEmpty()) {
+                            if (sourceType.getSelectedItem().equals(SOURCE_TYPE.PRESENTATION)) {
+                                createPresentationFrame("");
+                            }
+                            //recordDebugUpdate(record);
+                            executors.forEach(ProcessExecutor::start);
                             stop.setEnabled(true);
                             start.setEnabled(false);
                         }
@@ -78,11 +79,11 @@ public class Main extends JFrame {
         stop.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                recordersList.forEach(record -> {
-                    record.stop();
-                    recordFilePath = RecordUtils.getFreeFileName(recordFilePath.toAbsolutePath());
-                });
                 recordFilePath = RecordUtils.getFreeFileName(recordFilePath.toAbsolutePath());
+                executors.forEach(record -> {
+                    record.stop();
+                    record.getSetupSettings().refreshPath(recordFilePath.toString());
+                });
                 stop.setEnabled(false);
                 start.setEnabled(true);
             }
@@ -105,8 +106,24 @@ public class Main extends JFrame {
         screenRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AbstractRecord record = new FileRecord(baseSource);
-                replaceRecordMode(record);
+                SetupSettings.Settings settings = recordSource.getSetupSettings(recordFilePath.toString());
+                replaceExecutor(new ProcessExecutor(settings));
+            }
+        });
+
+        twitchRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO
+                String url = "rtmp://a.rtmp.youtube.com/live2/2zre-4z94-bxbf-v2b4-8ps9";
+                SetupSettings.Settings settings = recordSource.getSetupSettings(url);
+                replaceExecutor(new ProcessExecutor(settings));
+//                processExecutor = new ProcessExecutor(
+//                        "rtmp://a.rtmp.youtube.com/live2",
+//                        "2zre-4z94-bxbf-v2b4-8ps9",
+//                        new ScreenAreaSource(new Rectangle(300, 300, 900, 600))
+//                );
+                //   processExecutor.start();
             }
         });
         previousSlideButton.addActionListener(new ActionListener() {
@@ -131,26 +148,16 @@ public class Main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CONTROLLER.setCurrentPresentation(presentationsList.getSelectedItem().toString());
-                ((SlidePanel) tmpPanel).setImage(CONTROLLER.currentSlide());
-                tmpPanel.repaint();
-            }
-        });
-        twitchRadioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //TODO
-                streamExecutor = new StreamExecutor(
-                        "rtmp://a.rtmp.youtube.com/live2",
-                        "2zre-4z94-bxbf-v2b4-8ps9",
-                        new ScreenAreaSource(new Rectangle(300, 300, 900, 600))
-                );
-                streamExecutor.start();
+               // ((SlidePanel) tmpPanel).setImage(CONTROLLER.currentSlide());
+              //  tmpPanel.repaint();
             }
         });
 
+        sourceType.addItem(SOURCE_TYPE.NONE);
+        sourceType.addItem(SOURCE_TYPE.PRESENTATION);
         sourceType.addItem(SOURCE_TYPE.FULL);
         sourceType.addItem(SOURCE_TYPE.AREA);
-        sourceType.addItem(SOURCE_TYPE.PRESENTATION);
+        sourceType.addItem(SOURCE_TYPE.CAPTURE_FRAME);
         sourceType.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -158,10 +165,11 @@ public class Main extends JFrame {
                 nextSlideButton.setVisible(false);
                 tmpPanel.setVisible(false);
                 presentationsList.setVisible(false);
+                presText.setVisible(false);
 
                 Object source_type = sourceType.getSelectedItem();
                 if (source_type.equals(SOURCE_TYPE.FULL)) {
-                    baseSource = new ScreenAreaSource();
+                    recordSource = new RecordSource(getScreenSize());
                 } else if (source_type.equals(SOURCE_TYPE.AREA)) {
                     transFrame = createTransparentFrame(new Point(0, 0), Toolkit.getDefaultToolkit().getScreenSize());
                     transFrame.addMouseListener(new MouseListener() {
@@ -185,7 +193,7 @@ public class Main extends JFrame {
                                     e.getLocationOnScreen().x - firstMousePoint.x,
                                     e.getLocationOnScreen().y - firstMousePoint.y
                             );
-                            baseSource = new ScreenAreaSource(rec);
+                            recordSource = new RecordSource(rec);
                             transFrame.dispatchEvent(new WindowEvent(transFrame, WindowEvent.WINDOW_CLOSING));
                         }
 
@@ -219,13 +227,22 @@ public class Main extends JFrame {
                     });
                     transFrame.show();
                     pack();
+                } else if (source_type.equals(SOURCE_TYPE.CAPTURE_FRAME)) {
+                    selectedCapturedFrame();
                 } else if (source_type.equals(SOURCE_TYPE.PRESENTATION)) {
-                    baseSource = new PresentationSource(CONTROLLER);
-                    previousSlideButton.setVisible(true);
-                    nextSlideButton.setVisible(true);
-                    tmpPanel.setVisible(true);
-                    presentationsList.setVisible(true);
+//                    baseSource = new PresentationSource(CONTROLLER);
+//                    previousSlideButton.setVisible(true);
+//                    nextSlideButton.setVisible(true);
+//                    tmpPanel.setVisible(true);
+                      recordSource = new RecordSource("Presentation");
+
+                      presentationsList.setVisible(true);
+                      presText.setVisible(true);
                 }
+
+                screenRadioButton.setSelected(false);
+                projectorRadioButton.setSelected(false);
+                twitchRadioButton.setSelected(false);
             }
         });
 
@@ -234,6 +251,106 @@ public class Main extends JFrame {
         setMinimumSize(new Dimension(650, 400));
         setSize(650, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private void selectedCapturedFrame() {
+        setVisible(false);
+        JFrame captureTransFrame = createTransparentFrame(new Point(0, 0), Toolkit.getDefaultToolkit().getScreenSize());
+        captureTransFrame.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                captureTransFrame.dispatchEvent(new WindowEvent(captureTransFrame, WindowEvent.WINDOW_CLOSING));
+                String winName = WindowsInfo.find0();
+                int res = JOptionPane.showConfirmDialog(
+                        mainPanel,
+                        "Do you want to capture a window - " + winName + " ?",
+                        "Capture window selection",
+                        JOptionPane.YES_NO_CANCEL_OPTION
+                );
+                if (res == 0) {
+                    setVisible(true);
+                    recordSource = new RecordSource(winName);
+                } else if (res == 1) {
+                    selectedCapturedFrame();
+                } else if (res == 2) {
+                    setVisible(true);
+                    return;
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+    }
+
+    private JFrame createPresentationFrame(String name) {
+        Rectangle rec = getScreenSize();
+        rec.height = rec.height - 1;
+
+        JFrame f = new JFrame("Presentation");
+        f.setLayout(new BorderLayout());
+
+        SlidePanel panel = new SlidePanel(CONTROLLER.currentSlide());
+        panel.setSize(rec.getSize());
+        panel.setLocation(rec.getLocation());
+        panel.setVisible(true);
+        f.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    panel.setImage(CONTROLLER.prevSlide());
+                    panel.repaint();
+
+                } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    panel.setImage(CONTROLLER.nextSlide());
+                    panel.repaint();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+        f.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                stop.doClick();
+                super.windowClosing(e);
+            }
+        });
+        f.add(panel);
+
+        f.pack();
+        f.setSize(rec.getSize());
+        f.setLocation(rec.getLocation());
+        f.setResizable(false);
+        f.setAlwaysOnTop(true);
+        f.show();
+        f.setExtendedState(MAXIMIZED_HORIZ);
+        return f;
     }
 
     private JFrame createTransparentFrame(Point loc, Dimension size) {
@@ -258,10 +375,10 @@ public class Main extends JFrame {
         tmpPanel = new SlidePanel(CONTROLLER.currentSlide());
     }
 
-    public void replaceRecordMode(AbstractRecord record) {
-        recordersList.remove(record);
-        recordersList.add(record);
+    public void replaceExecutor(ProcessExecutor executor) {
+        executors.remove(executor);
+        executors.add(executor);
 
-        log.info("Add new record mode {} to records, size: {}", record.getClass(), recordersList.size());
+        log.info("Add new record mode {} to records, size: {}", executor.getClass(), executors.size());
     }
 }

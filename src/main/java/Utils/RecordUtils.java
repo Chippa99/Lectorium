@@ -6,6 +6,9 @@ import com.xuggle.xuggler.ICodec;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -61,7 +64,15 @@ public class RecordUtils {
         }
     }
 
-    public static void createVoidWindow() {
+    public static Rectangle getScreenSize() {
+        Dimension dem = Toolkit.getDefaultToolkit().getScreenSize();
+        return new Rectangle(0, 0, dem.width, dem.height);
+    }
 
+    public static String convertToUTF8(String str) {
+        Charset cset = StandardCharsets.UTF_8;
+        ByteBuffer buf = cset.encode(str);
+        byte[] b = buf.array();
+        return new String(b);
     }
 }
