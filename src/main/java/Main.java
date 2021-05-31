@@ -1,6 +1,6 @@
+import ApiYoutube.BroadcastCreator;
 import Recorders.ProcessExecutor;
 import Sources.*;
-import Recorders.AbstractRecord;
 import Presentation.SlideController;
 import Presentation.SlidePanel;
 import Utils.RecordUtils;
@@ -40,7 +40,6 @@ public class Main extends JFrame {
     private JLabel screenRec;
     private SlidePanel slidePanel;
 
-    private final List<AbstractRecord> recordersList = new ArrayList<>();
     private final List<ProcessExecutor> executors = new ArrayList<>();
     private RecordSource recordSource = new RecordSource(getScreenSize());
     private Point firstMousePoint;
@@ -115,15 +114,10 @@ public class Main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //TODO
-                String url = "rtmp://a.rtmp.youtube.com/live2/2zre-4z94-bxbf-v2b4-8ps9";
-                SetupSettings.Settings settings = recordSource.getSetupSettings(url);
+               // String url = "rtmp://a.rtmp.youtube.com/live2/2zre-4z94-bxbf-v2b4-8ps9";
+                String streamUrl = BroadcastCreator.createStream();
+                SetupSettings.Settings settings = recordSource.getSetupSettings(streamUrl);
                 replaceExecutor(new ProcessExecutor(settings));
-//                processExecutor = new ProcessExecutor(
-//                        "rtmp://a.rtmp.youtube.com/live2",
-//                        "2zre-4z94-bxbf-v2b4-8ps9",
-//                        new ScreenAreaSource(new Rectangle(300, 300, 900, 600))
-//                );
-                //   processExecutor.start();
             }
         });
         previousSlideButton.addActionListener(new ActionListener() {

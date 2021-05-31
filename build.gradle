@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+version '1.0'
+mainClassName = 'Main'
 
 repositories {
     mavenCentral()
@@ -27,8 +28,6 @@ dependencies {
     implementation group: 'com.google.apis', name: 'google-api-services-youtube', version: 'v3-rev222-1.25.0'
     implementation group: 'net.java.dev.jna', name: 'jna-platform', version: '5.5.0'
     implementation group: 'net.java.dev.jna', name: 'jna', version: '5.8.0'
-
-
 }
 
 test {

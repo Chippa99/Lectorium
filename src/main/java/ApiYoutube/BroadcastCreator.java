@@ -1,7 +1,6 @@
 package ApiYoutube;
 
-import Recorders.AbstractRecord;
-import Sources.ScreenAreaSource;
+import Utils.LectoriumThreadExecutor;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.util.DateTime;
@@ -11,17 +10,18 @@ import com.google.common.collect.Lists;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class BroadcastCreator {
 
     private static YouTube youtube;
-    protected final static ExecutorService executor = Executors.newSingleThreadExecutor();
-    public static void main(String[] args) {
+    public static String createStream() {
         List<String> scopes = Lists.newArrayList("https://www.googleapis.com/auth/youtube");
 
         try {
@@ -35,6 +35,8 @@ public class BroadcastCreator {
 
             LiveBroadcastSnippet broadcastSnippet = new LiveBroadcastSnippet();
             broadcastSnippet.setTitle(title);
+
+            TimeZone.setDefault(TimeZone.getTimeZone("Europe/Moscow"));
             Instant now = Instant.now().plus(3, ChronoUnit.HOURS);
             broadcastSnippet.setScheduledStartTime(new DateTime(now.toEpochMilli()));
             broadcastSnippet.setScheduledEndTime(new DateTime(now.plus(2, ChronoUnit.DAYS).toEpochMilli()));
@@ -80,14 +82,7 @@ public class BroadcastCreator {
             YouTube.LiveStreams.Insert liveStreamInsert =
                     youtube.liveStreams().insert("snippet,cdn", stream);
             LiveStream returnedStream = liveStreamInsert.execute();
-            executor.execute(() -> {
-                AbstractRecord encoder = new RTMPEncoder(
-                        returnedStream.getCdn().getIngestionInfo().getIngestionAddress(),
-                        returnedStream.getCdn().getIngestionInfo().getStreamName(),
-                        new ScreenAreaSource()
-                );
-                encoder.start(Path.of(""));
-            });
+            String url = returnedStream.getCdn().getIngestionInfo().getIngestionAddress() + "/" + returnedStream.getCdn().getIngestionInfo().getStreamName();
 
             //TODO here stream RTMP
 
@@ -109,7 +104,7 @@ public class BroadcastCreator {
             System.out.println("  - Broadcast Id: " + returnedBroadcast.getId());
             System.out.println(
                     "  - Bound Stream Id: " + returnedBroadcast.getContentDetails().getBoundStreamId());
-
+            return url;
         } catch (GoogleJsonResponseException e) {
             System.err.println("GoogleJsonResponseException code: " + e.getDetails().getCode() + " : "
                     + e.getDetails().getMessage());
@@ -122,5 +117,6 @@ public class BroadcastCreator {
             System.err.println("Throwable: " + t.getMessage());
             t.printStackTrace();
         }
+        return null;
     }
 }
