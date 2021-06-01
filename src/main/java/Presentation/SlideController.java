@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class SlideController {
-    SlideReader reader;
+    final SlideReader reader;
     String currentPresentation;
     Integer currentSlide;
 

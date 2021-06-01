@@ -7,8 +7,6 @@ import com.sun.jna.platform.win32.WinUser;
 import com.sun.jna.win32.StdCallLibrary;
 
 import java.awt.*;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,48 +15,6 @@ import java.util.List;
 import static com.sun.jna.platform.win32.WinUser.*;
 
 public class WindowsInfo {
-
-    public static String find() {
-        final User32 user32 = User32.INSTANCE;
-        final List<String> frame = new ArrayList<>();
-        user32.EnumWindows(new WndEnumProc() {
-            int count = 0;
-
-            @Override
-            public boolean callback(int hWnd, int lParam) {
-                byte[] windowText = new byte[512];
-                user32.GetWindowTextA(hWnd, windowText, 512);
-                String wText = Native.toString(windowText);
-
-                RECT rect = new RECT();
-                user32.GetClientRect(hWnd, rect);
-
-                POINT pos = new POINT();
-                user32.GetCursorPos(pos);
-
-                Rectangle rec = rect.toRectangle();
-
-                if (wText.isEmpty()) {
-                    return true;
-                }
-                if (pos.x > rec.x && pos.x <= rec.width
-                        && pos.y > rec.y && pos.y <= rec.height
-                        && user32.IsWindowVisible(hWnd)) {
-                    try {
-                        System.out.println("Found window with text " + hWnd + "," +
-                                " total " + ++count + " Text: " + new String(wText.getBytes(Charset.defaultCharset()), "UTF-8") +
-                                ", coord: " + rect.toRectangle());
-                    } catch (UnsupportedEncodingException e) {
-                        System.out.println(e.toString());
-                    }
-                    frame.add(wText);
-                }
-                return true;
-            }
-        }, null);
-        return frame.get(0);
-    }
-
     public static String find0() {
         User32 user32 = User32.INSTANCE;
         final List<WindowInfo> inflList = new ArrayList<WindowInfo>();
@@ -82,7 +38,7 @@ public class WindowsInfo {
                   //  if (r.left > -32000) {     // minimized
                         byte[] buffer = new byte[1024];
                         user32.GetWindowTextA(hWnd, buffer, buffer.length);
-                        String title = Native.toString(buffer);
+                        String title = Native.toString(buffer); //new String(buffer, StandardCharsets.UTF_16LE);
                         inflList.add(new WindowInfo(hWnd, rect, title));
                  //   }
                 }
@@ -107,6 +63,8 @@ public class WindowsInfo {
 
         boolean EnumWindows(WndEnumProc wndenumproc, Pointer arg);
 
+        int GetWindowTextW(int hWnd, byte[] lpString, int nMaxCount);
+
         int GetWindowTextA(int hWnd, byte[] lpString, int nMaxCount);
 
         boolean GetClientRect(int hWnd, WinDef.RECT rect);
@@ -126,7 +84,7 @@ public class WindowsInfo {
         boolean	FlashWindowEx(WinUser.FLASHWINFO pfwi);
     }
 
-    public static interface WndEnumProc extends StdCallLibrary.StdCallCallback {
+    public interface WndEnumProc extends StdCallLibrary.StdCallCallback {
         boolean callback(int hWnd, int lParam);
     }
 

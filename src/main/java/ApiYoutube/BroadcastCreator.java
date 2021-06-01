@@ -1,6 +1,5 @@
 package ApiYoutube;
 
-import Utils.LectoriumThreadExecutor;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.util.DateTime;
@@ -9,14 +8,9 @@ import com.google.api.services.youtube.model.*;
 import com.google.common.collect.Lists;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class BroadcastCreator {
 
@@ -30,27 +24,30 @@ public class BroadcastCreator {
             youtube = new YouTube.Builder(AuthYoutube.HTTP_TRANSPORT, AuthYoutube.JSON_FACTORY, credential)
                     .setApplicationName("youtube-cmdline-createbroadcast-sample").build();
 
-            String title = "TEST1";
+            String title = "Test broadcast";
             System.out.println("You chose " + title + " for broadcast title.");
 
             LiveBroadcastSnippet broadcastSnippet = new LiveBroadcastSnippet();
-            broadcastSnippet.setTitle(title);
-
             TimeZone.setDefault(TimeZone.getTimeZone("Europe/Moscow"));
             Instant now = Instant.now().plus(3, ChronoUnit.HOURS);
-            broadcastSnippet.setScheduledStartTime(new DateTime(now.toEpochMilli()));
-            broadcastSnippet.setScheduledEndTime(new DateTime(now.plus(2, ChronoUnit.DAYS).toEpochMilli()));
+            broadcastSnippet.setScheduledStartTime(new DateTime(now.plus(2, ChronoUnit.HOURS).toEpochMilli()));
+            broadcastSnippet.setScheduledEndTime(new DateTime(now.plus(1, ChronoUnit.DAYS).toEpochMilli()));
+            broadcastSnippet.setTitle(title);
 
             LiveBroadcastStatus status = new LiveBroadcastStatus();
             status.setPrivacyStatus("private");
+            status.setMadeForKids(false);
+
+            LiveBroadcastContentDetails details = new LiveBroadcastContentDetails();
+            details.setEnableAutoStart(true);
 
             LiveBroadcast broadcast = new LiveBroadcast();
             broadcast.setKind("youtube#liveBroadcast");
             broadcast.setSnippet(broadcastSnippet);
             broadcast.setStatus(status);
-
+            broadcast.setContentDetails(details);
             YouTube.LiveBroadcasts.Insert liveBroadcastInsert =
-                    youtube.liveBroadcasts().insert("snippet,status", broadcast);
+                    youtube.liveBroadcasts().insert("snippet,status,contentDetails", broadcast);
             LiveBroadcast returnedBroadcast = liveBroadcastInsert.execute();
 
             System.out.println("\n================== Returned Broadcast ==================\n");

@@ -8,7 +8,7 @@ public class SetupSettings {
         void refreshPath(String newSource);
     }
 
-    class ScreenAreaSettings implements Settings {
+    static class ScreenAreaSettings implements Settings {
         private final String[] settings;
 
         ScreenAreaSettings(String source, Rectangle frame) {
@@ -32,7 +32,7 @@ public class SetupSettings {
         }
     }
 
-    class CaptureFrameSettings implements Settings {
+    static class CaptureFrameSettings implements Settings {
         private final String[] settings;
 
         CaptureFrameSettings(String source, String frameName) {

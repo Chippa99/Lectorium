@@ -5,7 +5,10 @@ import Utils.LectoriumThreadExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +32,7 @@ public class ProcessExecutor {
                     log.info("Stream start");
                     process = processBuilder.start();
                     if (!process.waitFor(30, TimeUnit.MINUTES)) {
-                       stop();
+                        stop();
                     }
                     int exitCode = process.exitValue();
                     if (!(exitCode == 0 || exitCode == 1))
@@ -43,20 +46,27 @@ public class ProcessExecutor {
 //        getMicrophone();
     }
 
-    private String getMicrophone() {
+    public static void main(String[] args) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();
             processBuilder.command("ffmpeg", "-list_devices", "true", "-f", "dshow", "-i", "dummy");
             log.info("Start find microphone");
-            process = processBuilder.start();
+            Process process = processBuilder.start();
+            ResultStreamHandler res = new ResultStreamHandler(process.getInputStream());
+            LectoriumThreadExecutor.getExecutor().execute(res);
             if (!process.waitFor(30, TimeUnit.MINUTES)) {
-                stop();
+                process.destroy();
+                if (!process.waitFor(5, TimeUnit.SECONDS)) {
+                    process.destroyForcibly();
+                }
             }
-     //       log.info("Stream stop: {}", s);
+            String resString = res.getInput();
+
+            //       log.info("Stream stop: {}", s);
         } catch (Exception e) {
             log.error(e.toString());
         }
-        return "";
+       // return "";
     }
 
     public void stop() {
@@ -83,5 +93,35 @@ public class ProcessExecutor {
     @Override
     public int hashCode() {
         return ProcessExecutor.class.getName().hashCode();
+    }
+
+    private static class ResultStreamHandler implements Runnable {
+        private InputStream inputStream;
+        private final StringBuilder builder = new StringBuilder();
+
+        private ResultStreamHandler(InputStream inputStream) {
+            this.inputStream = inputStream;
+        }
+
+        public void run() {
+            BufferedReader bufferedReader = null;
+            try {
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                String line = null;
+                while ((line = bufferedReader.readLine()) != null) {
+                    builder.append(line).append("\n");
+                }
+            } catch (Throwable t) {
+            } finally {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+
+        public String getInput() {
+            return builder.toString();
+        }
     }
 }

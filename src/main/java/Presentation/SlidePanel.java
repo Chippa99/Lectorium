@@ -22,7 +22,7 @@ public class SlidePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image.getScaledInstance(getWidth(),getHeight(),Image.SCALE_SMOOTH), 0, 0, this); // see javadoc for more info on the parameters
+        g.drawImage(image.getScaledInstance(getWidth(),getHeight(),Image.SCALE_SMOOTH), 0, 0, this);
     }
 
     public void setImage(Path path) {
