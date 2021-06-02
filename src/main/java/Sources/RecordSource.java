@@ -1,5 +1,7 @@
 package Sources;
 
+import Utils.SystemInfo;
+
 import java.awt.*;
 
 public class RecordSource {
@@ -16,17 +18,9 @@ public class RecordSource {
         this.frameName = frameName;
     }
 
-    public String getFrameName() {
-        return frameName;
-    }
-
-    public Rectangle getScreenSize() {
-        return screenSize;
-    }
-
-    public SetupSettings.Settings getSetupSettings(String file) {
-       return screenSize == null ?
-                new SetupSettings().buildCaptureFrameSettings(file, frameName) :
-                new SetupSettings().buildScreenAreaSettings(file, screenSize);
+    public Settings getSetupSettings(String file) {
+       return screenSize != null ?
+                new ScreenAreaSettings(file, screenSize) :
+                new CaptureFrameSettings(file, frameName);
     }
 }

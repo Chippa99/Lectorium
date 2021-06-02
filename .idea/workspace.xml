@@ -5,31 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="835bb7a0-1afe-4219-9c95-5f7d5aacfb91" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Lectorium.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Lectorium.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/twitch_api_wrapper_0_3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/Lectorium.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ApiYoutube/BroadcastCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ApiYoutube/BroadcastCreator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Presentation/SlideController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Presentation/SlideController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Presentation/SlidePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Presentation/SlidePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Recorders/ProcessExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Recorders/ProcessExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Sources/SetupSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Sources/SetupSettings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/RecordUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/RecordUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/WindowsInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/WindowsInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/SystemInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/SystemInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +96,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.ProcessExecutor">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="C:\Program Files\Java\jdk1.8.0_291\jre" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -137,6 +114,21 @@
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="Recorders.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SystemInfo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="openjdk-15" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="Utils.SystemInfo" />
+      <module name="Lectorium.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Utils.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -230,43 +222,22 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Lectorium [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="jar" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Application.WindowsInfo" />
       <item itemvalue="Application.Main" />
+      <item itemvalue="Application.ProcessExecutor" />
       <item itemvalue="Gradle.Lectorium [dependencies]" />
       <item itemvalue="Gradle.Lectorium [build]" />
-      <item itemvalue="Gradle.Lectorium [jar]" />
       <item itemvalue="Gradle.Lectorium [clean]" />
-      <item itemvalue="Application.ProcessExecutor" />
+      <item itemvalue="Application.SystemInfo" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.ProcessExecutor" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.SystemInfo" />
+        <item itemvalue="Application.ProcessExecutor" />
         <item itemvalue="Gradle.Lectorium [clean]" />
         <item itemvalue="Gradle.Lectorium [build]" />
-        <item itemvalue="Gradle.Lectorium [jar]" />
       </list>
     </recent_temporary>
   </component>
@@ -302,9 +273,14 @@
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Recorders/ProcessExecutor.java</url>
-          <line>62</line>
-          <option name="timeStamp" value="10" />
+          <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
+          <line>451</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Utils/SystemInfo.java</url>
+          <line>35</line>
+          <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

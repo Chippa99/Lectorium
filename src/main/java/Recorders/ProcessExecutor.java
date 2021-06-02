@@ -1,24 +1,22 @@
 package Recorders;
 
-import Sources.SetupSettings;
+import Sources.Settings;
 import Utils.LectoriumThreadExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 public class ProcessExecutor {
     private Process process;
-    private SetupSettings.Settings setupSettings;
+    private Settings setupSettings;
     private static final Logger log = LoggerFactory.getLogger(ProcessExecutor.class);
+    public enum RECORD_TYPE {FILE, STREAM}
+    private final RECORD_TYPE recordType;
 
-    public ProcessExecutor(SetupSettings.Settings setupSettings) {
+    public ProcessExecutor(Settings setupSettings, RECORD_TYPE recordType) {
         this.setupSettings = setupSettings;
+        this.recordType = recordType;
     }
 
     public void start() {
@@ -31,7 +29,7 @@ public class ProcessExecutor {
                     processBuilder.inheritIO();
                     log.info("Stream start");
                     process = processBuilder.start();
-                    if (!process.waitFor(30, TimeUnit.MINUTES)) {
+                    if (!process.waitFor(15, TimeUnit.SECONDS)) {
                         stop();
                     }
                     int exitCode = process.exitValue();
@@ -43,30 +41,6 @@ public class ProcessExecutor {
                 }
             }
         });
-//        getMicrophone();
-    }
-
-    public static void main(String[] args) {
-        try {
-            ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.command("ffmpeg", "-list_devices", "true", "-f", "dshow", "-i", "dummy");
-            log.info("Start find microphone");
-            Process process = processBuilder.start();
-            ResultStreamHandler res = new ResultStreamHandler(process.getInputStream());
-            LectoriumThreadExecutor.getExecutor().execute(res);
-            if (!process.waitFor(30, TimeUnit.MINUTES)) {
-                process.destroy();
-                if (!process.waitFor(5, TimeUnit.SECONDS)) {
-                    process.destroyForcibly();
-                }
-            }
-            String resString = res.getInput();
-
-            //       log.info("Stream stop: {}", s);
-        } catch (Exception e) {
-            log.error(e.toString());
-        }
-       // return "";
     }
 
     public void stop() {
@@ -80,48 +54,18 @@ public class ProcessExecutor {
         }
     }
 
-    public SetupSettings.Settings getSetupSettings() {
+    public Settings getSetupSettings() {
         return setupSettings;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof ProcessExecutor
-                && Arrays.equals(((ProcessExecutor) obj).setupSettings.getSetupSettings(), setupSettings.getSetupSettings());
+        return obj instanceof ProcessExecutor && ((ProcessExecutor)obj).recordType == recordType;
+            //    && ((ProcessExecutor)obj).setupSettings.getClass().isAssignableFrom(setupSettings.getClass());
     }
 
     @Override
     public int hashCode() {
         return ProcessExecutor.class.getName().hashCode();
-    }
-
-    private static class ResultStreamHandler implements Runnable {
-        private InputStream inputStream;
-        private final StringBuilder builder = new StringBuilder();
-
-        private ResultStreamHandler(InputStream inputStream) {
-            this.inputStream = inputStream;
-        }
-
-        public void run() {
-            BufferedReader bufferedReader = null;
-            try {
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                String line = null;
-                while ((line = bufferedReader.readLine()) != null) {
-                    builder.append(line).append("\n");
-                }
-            } catch (Throwable t) {
-            } finally {
-                try {
-                    bufferedReader.close();
-                } catch (IOException e) {
-                }
-            }
-        }
-
-        public String getInput() {
-            return builder.toString();
-        }
     }
 }
