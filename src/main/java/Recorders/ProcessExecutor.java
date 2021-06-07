@@ -29,9 +29,6 @@ public class ProcessExecutor {
                     processBuilder.inheritIO();
                     log.info("Stream start");
                     process = processBuilder.start();
-                    if (!process.waitFor(15, TimeUnit.SECONDS)) {
-                        stop();
-                    }
                     int exitCode = process.exitValue();
                     if (!(exitCode == 0 || exitCode == 1))
                         throw new IllegalStateException("Process " + setupSettings.getSetupSettings()[0] + "stopped with exitCode - " + exitCode);
@@ -49,6 +46,7 @@ public class ProcessExecutor {
             if (!process.waitFor(5, TimeUnit.SECONDS)) {
                 process.destroyForcibly();
             }
+            log.error("Process has ben stop");
         } catch (InterruptedException e) {
             log.error("Error during waiting destroy process");
         }

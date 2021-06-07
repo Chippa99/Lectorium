@@ -5,18 +5,41 @@ import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinUser;
 import com.sun.jna.win32.StdCallLibrary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
 
 import static com.sun.jna.platform.win32.WinUser.*;
 
 public class WindowsInfo {
-    public static String find0() {
-        User32 user32 = User32.INSTANCE;
+    private static final Logger log = LoggerFactory.getLogger(WindowsInfo.class);
+    private final static User32 user32 = User32.INSTANCE;
+    public static Map<String, String> findAllClassNames() {
+        final Map<String, String> classNames = new HashMap<>();
+
+        user32.EnumWindows(new WndEnumProc() {
+            public boolean callback(int hWnd, int lParam) {
+                if (user32.IsWindowVisible(hWnd)) {
+
+                    char[] bufferClass = new char[1024];
+                    user32.GetClassNameW(hWnd, bufferClass, bufferClass.length);
+                    String className = Native.toString(bufferClass);
+
+                    byte[] bufferTitle = new byte[1024];
+                    user32.GetWindowTextA(hWnd, bufferTitle, bufferTitle.length);
+                    String title = Native.toString(bufferTitle);
+                    classNames.put(className, title);
+                }
+                return true;
+            }
+        }, null);
+        return classNames;
+    }
+
+    public static String findFirstFrame() {
         final List<WindowInfo> inflList = new ArrayList<WindowInfo>();
         final List<Integer> order = new ArrayList<Integer>();
         int top = user32.GetTopWindow(0);
@@ -50,9 +73,7 @@ public class WindowsInfo {
                 return order.indexOf(o1.hwnd) - order.indexOf(o2.hwnd);
             }
         });
-        for (WindowInfo w : inflList) {
-            System.out.println(w);
-        }
+        log.info("The following windows were detected: [{}]", inflList);
         return inflList.get(0).title;
     }
 
@@ -63,11 +84,7 @@ public class WindowsInfo {
 
         boolean EnumWindows(WndEnumProc wndenumproc, Pointer arg);
 
-        int GetWindowTextW(int hWnd, byte[] lpString, int nMaxCount);
-
         int GetWindowTextA(int hWnd, byte[] lpString, int nMaxCount);
-
-        boolean GetClientRect(int hWnd, WinDef.RECT rect);
 
         boolean GetCursorPos(WinDef.POINT p);
 
@@ -82,6 +99,8 @@ public class WindowsInfo {
         int GetWindow(int hWnd, int flag);
 
         boolean	FlashWindowEx(WinUser.FLASHWINFO pfwi);
+
+        int GetClassNameW(int hWnd, char[] lpClassName, int nMaxCount);
     }
 
     public interface WndEnumProc extends StdCallLibrary.StdCallCallback {

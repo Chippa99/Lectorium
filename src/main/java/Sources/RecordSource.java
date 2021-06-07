@@ -1,26 +1,28 @@
 package Sources;
 
-import Utils.SystemInfo;
-
 import java.awt.*;
 
 public class RecordSource {
-    private final String frameName;
-    private final Rectangle screenSize;
+    private String frameName;
+    private Rectangle screenSize;
 
     public RecordSource(Rectangle screenSize) {
+        this.screenSize = screenSize;
+    }
+
+    public void setScreenArea(Rectangle screenSize) {
         this.screenSize = screenSize;
         frameName = null;
     }
 
-    public RecordSource(String frameName) {
+    public void setCaptureFrame(String frameName) {
         this.screenSize = null;
         this.frameName = frameName;
     }
 
-    public Settings getSetupSettings(String file) {
+    public Settings getSetupSettings(String source, String preset) {
        return screenSize != null ?
-                new ScreenAreaSettings(file, screenSize) :
-                new CaptureFrameSettings(file, frameName);
+                new ScreenAreaSettings(source, screenSize, preset) :
+                new CaptureFrameSettings(source, frameName, preset);
     }
 }

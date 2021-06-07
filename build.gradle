@@ -26,7 +26,6 @@ jar {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-    implementation 'xuggle:xuggle-xuggler:5.4'
     implementation 'org.slf4j:slf4j-api:1.7.5'
     implementation 'org.slf4j:jcl-over-slf4j:1.7.5'
     implementation 'org.slf4j:slf4j-log4j12:1.7.5'
@@ -41,7 +40,6 @@ dependencies {
     implementation group: 'net.java.dev.jna', name: 'jna', version: '5.8.0'
     implementation 'com.intellij:forms_rt:7.0.3'
     compile 'com.intellij:forms_rt:7.0.3'
-  // compile name: 'forms_rt', version: '13.1.1'
 }
 
 test {

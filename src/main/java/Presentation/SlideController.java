@@ -5,12 +5,12 @@ import java.util.Collection;
 import java.util.List;
 
 public class SlideController {
-    final SlideReader reader;
-    String currentPresentation;
-    Integer currentSlide;
+    private final PresentationReader reader;
+    private PresentationInfo currentPresentation;
+    private int currentSlide;
 
     public SlideController(Path pathToFile) {
-        reader = new SlideReader(pathToFile);
+        reader = new PresentationReader(pathToFile);
         reader.uploadPresentations();
         if (!reader.getPresentations().isEmpty()) {
             currentPresentation = reader.getPresentations().keySet().stream().findFirst().get();
@@ -18,11 +18,11 @@ public class SlideController {
         }
     }
 
-    public Collection<String> getPresentationsNames() {
+    public Collection<PresentationInfo> getPresentationsNames() {
         return reader.getPresentations().keySet();
     }
 
-    public void setCurrentPresentation(String currentPresentation) {
+    public void setCurrentPresentation(PresentationInfo currentPresentation) {
         this.currentPresentation = currentPresentation;
         currentSlide = 0;
     }

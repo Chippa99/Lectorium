@@ -9,20 +9,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SlideReader {
+public class PresentationReader {
     private final Path pathToPresentations;
-    private Map<String, List<Path>> presentations = new HashMap<>();
+    private Map<PresentationInfo, List<Path>> presentations = new HashMap<>();
 
-    public SlideReader(Path pathToPresentations) {
+    public PresentationReader(Path pathToPresentations) {
         this.pathToPresentations = pathToPresentations;
     }
 
     public void uploadPresentations() {
         try {
             for(Path folder : Files.list(pathToPresentations).collect(Collectors.toList())) {
-                presentations.put(folder.toString(), new ArrayList<>());
+                PresentationInfo presentationInfo = new PresentationInfo(folder, folder.getFileName().toString());
+                presentations.put(presentationInfo, new ArrayList<>());
                 Files.list(folder).forEach(slide -> {
-                     presentations.get(folder.toString()).add(slide);
+                     presentations.get(presentationInfo).add(slide);
                 });
             }
         } catch (IOException e) {
@@ -31,11 +32,11 @@ public class SlideReader {
         }
     }
 
-    public Map<String, List<Path>> getPresentations() {
+    public Map<PresentationInfo, List<Path>> getPresentations() {
         return presentations;
     }
 
-    public void setPresentations(Map<String, List<Path>> presentations) {
+    public void setPresentations(Map<PresentationInfo, List<Path>> presentations) {
         this.presentations = presentations;
     }
 }

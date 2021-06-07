@@ -4,8 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
@@ -17,22 +19,33 @@ public class SystemInfo {
     private static final String FFMPEG_STRING = "ffmpeg";
     private static final String SEPARATOR = ";";
     private final String microName;
-    private final Path ffmpegPath;
+    private Path ffmpegPath;
 
     public SystemInfo() {
-        String path = System.getenv("FFMPEG_PATH");
-        if (path != null) {
-            ffmpegPath = Paths.get(path);
-        } else {
-            ffmpegPath = Paths.get(getPath());
+        try {
+            Files.list(Paths.get("").toAbsolutePath()).forEach(folder -> {
+                if (folder.getFileName().toString().equals(FFMPEG_STRING)) {
+                    ffmpegPath = Paths.get("ffmpeg\\bin").toAbsolutePath();
+                    return;
+                }
+            });
+        } catch (IOException e) {
+            log.error("Could not open ffmpeg", e);
         }
+        String path = System.getenv("FFMPEG_PATH");
+        if (ffmpegPath == null)
+            if (path != null) {
+                ffmpegPath = Paths.get(path);
+            } else {
+                ffmpegPath = Paths.get(getPath());
+            }
         microName = foundMicrophone();
     }
 
-    public String getPath() {
+    private String getPath() {
         String env = System.getenv("PATH");
         String[] paths = env.split(SEPARATOR);
-        for(int i = 0; i < paths.length; i++) {
+        for (int i = 0; i < paths.length; i++) {
             if (paths[i].contains(FFMPEG_STRING)) {
                 return paths[i];
             }
