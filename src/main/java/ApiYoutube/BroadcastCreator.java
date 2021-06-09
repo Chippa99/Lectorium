@@ -36,8 +36,7 @@ public class BroadcastCreator {
 
             LiveBroadcastStatus status = new LiveBroadcastStatus();
             status.setPrivacyStatus("private");
-            status.setMadeForKids(false);
-
+         //   status.setMadeForKids(false);
             LiveBroadcastContentDetails details = new LiveBroadcastContentDetails();
             details.setEnableAutoStart(true);
 

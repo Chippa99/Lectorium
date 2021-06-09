@@ -5,24 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="835bb7a0-1afe-4219-9c95-5f7d5aacfb91" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Presentation/PresentationFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Presentation/PresentationFinder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Presentation/PresentationInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Presentation/PresentationInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Presentation/PresentationReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Presentation/PresentationReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Presentation/SlideController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Presentation/SlideController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Recorders/ProcessExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Recorders/ProcessExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SourceType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SourceType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Sources/CaptureFrameSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Sources/CaptureFrameSettings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Sources/RecordSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Sources/RecordSource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Sources/ScreenAreaSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Sources/ScreenAreaSettings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Sources/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Sources/Settings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/RecordUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/RecordUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/SystemInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/SystemInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/WindowsInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/WindowsInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,17 +33,6 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="Lectorium" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="Lectorium" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="Lectorium" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -101,7 +74,7 @@
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="263" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="IntelliLang.Configuration" />
@@ -293,17 +266,20 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>492</line>
+          <line>513</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Sources/ScreenAreaSettings.java</url>
+          <line>23</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Utils/SystemInfo.java</url>
+          <line>71</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
       </breakpoints>
-      <default-breakpoints>
-        <breakpoint type="python-exception">
-          <properties notifyOnTerminate="true" exception="BaseException">
-            <option name="notifyOnTerminate" value="true" />
-          </properties>
-        </breakpoint>
-      </default-breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
@@ -313,6 +289,7 @@
     <watches-manager>
       <configuration name="Application">
         <watch expression="credential" />
+        <watch expression="res.builder" />
       </configuration>
     </watches-manager>
   </component>

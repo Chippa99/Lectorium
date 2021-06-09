@@ -56,7 +56,7 @@ public class SystemInfo {
     public String foundMicrophone() {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.command(ffmpegPath + "/ffmpeg", "-list_devices", "true", "-f", "dshow", "-i", "dummy");
+            processBuilder.command(ffmpegPath + "/ffmpeg.exe", "-list_devices", "true", "-f", "dshow", "-i", "dummy");
             processBuilder.redirectErrorStream(true);
             log.info("Start find microphone");
             Process process = processBuilder.start();
