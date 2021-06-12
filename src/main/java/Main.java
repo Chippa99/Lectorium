@@ -222,13 +222,15 @@ public class Main extends JFrame {
         stop.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                recordFilePath = RecordUtils.getFreeFileName(recordFilePath.toAbsolutePath());
-                executors.forEach(ProcessExecutor::stop);
-                executors.clear();
-                stop.setEnabled(false);
-                start.setEnabled(true);
-                fileIndicator.setSelected(false);
-                streamIndicator.setSelected(false);
+                if (!executors.isEmpty()) {
+                    recordFilePath = RecordUtils.getFreeFileName(recordFilePath.toAbsolutePath());
+                    executors.forEach(ProcessExecutor::stop);
+                    executors.clear();
+                    stop.setEnabled(false);
+                    start.setEnabled(true);
+                    fileIndicator.setSelected(false);
+                    streamIndicator.setSelected(false);
+                }
             }
         });
         fileCheckBox.addActionListener(new ActionListener() {
@@ -239,6 +241,7 @@ public class Main extends JFrame {
                 } else {
                     recordFilePath = null;
                 }
+                start.setEnabled(youtubeCheckBox.isSelected() || fileCheckBox.isSelected());
             }
         });
 
@@ -252,7 +255,7 @@ public class Main extends JFrame {
                 }
                 //TODO
                 // String url = "rtmp://a.rtmp.youtube.com/live2/2zre-4z94-bxbf-v2b4-8ps9";
-
+                start.setEnabled(youtubeCheckBox.isSelected() || fileCheckBox.isSelected());
             }
         });
         setUrlOnStreamRadioButton.addActionListener(new ActionListener() {
@@ -291,7 +294,7 @@ public class Main extends JFrame {
                 presentationsList.setVisible(false);
                 presText.setVisible(false);
                 FOUND_PRESENTATION = false;
-                start.setEnabled(true);
+              //  start.setEnabled(true);
                 pathToPresentation.setVisible(false);
 
                 Object source_type = sourceType.getSelectedItem();
