@@ -20,9 +20,9 @@ public class RecordSource {
         this.frameName = frameName;
     }
 
-    public Settings getSetupSettings(String source, String preset) {
+    public Settings getSetupSettings(String source) {
        return screenSize != null ?
-                new ScreenAreaSettings(source, screenSize, preset) :
-                new CaptureFrameSettings(source, frameName, preset);
+                new ScreenAreaSettings(source, screenSize) :
+                new CaptureFrameSettings(source, frameName);
     }
 }

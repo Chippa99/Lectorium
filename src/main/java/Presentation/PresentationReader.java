@@ -3,10 +3,7 @@ package Presentation;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PresentationReader {
@@ -19,12 +16,22 @@ public class PresentationReader {
 
     public void uploadPresentations() {
         try {
-            for(Path folder : Files.list(pathToPresentations).collect(Collectors.toList())) {
-                PresentationInfo presentationInfo = new PresentationInfo(folder, folder.getFileName().toString());
-                presentations.put(presentationInfo, new ArrayList<>());
-                Files.list(folder).forEach(slide -> {
-                     presentations.get(presentationInfo).add(slide);
-                });
+            if (Files.isDirectory(Files.list(pathToPresentations).collect(Collectors.toList()).get(0))) {
+                for (Path folder : Files.list(pathToPresentations).collect(Collectors.toList())) {
+                    PresentationInfo presentationInfo = new PresentationInfo(folder, folder.getFileName().toString());
+                    List<Path> paths = new ArrayList<>();
+                    paths.addAll(Files.list(folder).collect(Collectors.toList()));
+                    presentations.put(presentationInfo, paths);
+
+//                    Files.list(folder).forEach(slide -> {
+//                        presentations.get(presentationInfo).add(slide);
+//                    });
+                }
+            } else {
+                PresentationInfo presentationInfo = new PresentationInfo(pathToPresentations, pathToPresentations.getFileName().toString());
+                List<Path> paths = new ArrayList<>();
+                paths.addAll(Files.list(pathToPresentations).collect(Collectors.toList()));
+                presentations.put(presentationInfo, paths);
             }
         } catch (IOException e) {
             e.printStackTrace();

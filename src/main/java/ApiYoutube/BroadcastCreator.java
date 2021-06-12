@@ -1,5 +1,6 @@
 package ApiYoutube;
 
+import Utils.RecordUtils;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.util.DateTime;
@@ -36,9 +37,9 @@ public class BroadcastCreator {
 
             LiveBroadcastStatus status = new LiveBroadcastStatus();
             status.setPrivacyStatus("private");
-         //   status.setMadeForKids(false);
             LiveBroadcastContentDetails details = new LiveBroadcastContentDetails();
             details.setEnableAutoStart(true);
+            details.set("enableAutoStop", "true");
 
             LiveBroadcast broadcast = new LiveBroadcast();
             broadcast.setKind("youtube#liveBroadcast");
@@ -100,6 +101,7 @@ public class BroadcastCreator {
             System.out.println("  - Broadcast Id: " + returnedBroadcast.getId());
             System.out.println(
                     "  - Bound Stream Id: " + returnedBroadcast.getContentDetails().getBoundStreamId());
+            RecordUtils.callNotificationFrame("Трансляция запланирована", "Начало трансляции в");
             return url;
         } catch (GoogleJsonResponseException e) {
             System.err.println("GoogleJsonResponseException code: " + e.getDetails().getCode() + " : "

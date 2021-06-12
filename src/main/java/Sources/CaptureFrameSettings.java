@@ -1,23 +1,36 @@
 package Sources;
 
-public class CaptureFrameSettings implements Settings {
-    private final static String SETTINGS = "%s/ffmpeg.exe|-y|-f|gdigrab|-r|30|-rtbufsize|250M" +
-            "|-i|title=%s|-probesize|10M|-vcodec|h264|-f|dshow|-i|audio=%s|-c:v|libx264|-r|30|-preset|%s|-tune|zerolatency" +
-            "|-crf|20|-pix_fmt|yuv420p|-b:v|15000k|-maxrate|10000k|-minrate|5000k|-f|flv|%s|-vf|scale=ceil(iw/2)*2:ceil(ih/2)*2";
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class CaptureFrameSettings extends AbstractSettings {
+//    private final static String SETTINGS = "%s/ffmpeg.exe|-y|-f|gdigrab|-rtbufsize|%sM" +
+//            "|-i|title=%s|-probesize|10M|-f|dshow|-i|audio=%s|-c:v|h264|-r|%s|-preset|%s|-tune|zerolatency" +
+//            "|-crf|%s|-pix_fmt|yuv420p|-b:v|%sk|-maxrate|10000k|-minrate|5000k|-f|flv|%s|-vf|scale=ceil(iw/2)*2:ceil(ih/2)*2";
     private final String source;
     private final String frame;
-    private final String preset;
 
-    public CaptureFrameSettings(String source, String frame, String preset) {
+    public CaptureFrameSettings(String source, String frame) {
         this.source = source;
         this.frame = frame;
-        this.preset = preset;
     }
 
     @Override
     public String[] getSetupSettings() {
         String settings =
-                String.format(SETTINGS, systemInfo.getFfmpegPath(), frame, systemInfo.getMicroName(), preset, source);
-        return settings.split(SEPARATOR);
+                String.format(SETTINGS,
+                        systemInfo.getFfmpegPath(),
+                        1024,
+                        buffer,
+                        "",
+                        "title=" + frame,
+                        systemInfo.getMicroName(),
+                        fps,
+                        preset,
+                        crt,
+                        bitrate,
+                        source
+                );
+        return Arrays.stream(settings.split(SEPARATOR)).filter(it -> !it.isEmpty()).collect(Collectors.toList()).toArray(new String[]{});
     }
 }

@@ -2,21 +2,24 @@ package Recorders;
 
 import Sources.Settings;
 import Utils.LectoriumThreadExecutor;
+import Utils.SystemInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ProcessExecutor {
     private Process process;
-    private Settings setupSettings;
+    private final Settings setupSettings;
     private static final Logger log = LoggerFactory.getLogger(ProcessExecutor.class);
-    public enum RECORD_TYPE {FILE, STREAM}
-    private final RECORD_TYPE recordType;
 
-    public ProcessExecutor(Settings setupSettings, RECORD_TYPE recordType) {
+    public ProcessExecutor(Settings setupSettings) {
         this.setupSettings = setupSettings;
-        this.recordType = recordType;
     }
 
     public void start() {
@@ -26,9 +29,11 @@ public class ProcessExecutor {
                 try {
                     ProcessBuilder processBuilder = new ProcessBuilder();
                     processBuilder.command(setupSettings.getSetupSettings());
-                    processBuilder.inheritIO();
+                    processBuilder.redirectErrorStream(true);
                     log.info("Stream start");
                     process = processBuilder.start();
+                    ResultStreamHandler res = new ResultStreamHandler(process.getInputStream());
+                    res.run();
                     int exitCode = process.exitValue();
                     if (!(exitCode == 0 || exitCode == 1))
                         throw new IllegalStateException("Process " + setupSettings.getSetupSettings()[0] + "stopped with exitCode - " + exitCode);
@@ -52,18 +57,27 @@ public class ProcessExecutor {
         }
     }
 
-    public Settings getSetupSettings() {
-        return setupSettings;
-    }
+    private class ResultStreamHandler implements Runnable {
+        private final InputStream inputStream;
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof ProcessExecutor && ((ProcessExecutor)obj).recordType == recordType;
-            //    && ((ProcessExecutor)obj).setupSettings.getClass().isAssignableFrom(setupSettings.getClass());
-    }
+        private ResultStreamHandler(InputStream inputStream) {
+            this.inputStream = inputStream;
+        }
 
-    @Override
-    public int hashCode() {
-        return ProcessExecutor.class.getName().hashCode();
+        @Override
+        public void run() {
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+                Pattern patter = Pattern.compile("Failed to capture image");
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    log.debug(line);
+                    if (patter.matcher(line).find()) {
+                        stop();
+                    }
+                }
+            } catch (Throwable t) {
+                log.error(t.toString());
+            }
+        }
     }
 }

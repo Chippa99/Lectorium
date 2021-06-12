@@ -70,3 +70,4 @@ nbbuild/
 dist/
 .gradle/
 .idea/
+*.mp4

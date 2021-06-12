@@ -1,7 +1,7 @@
 public enum SourceType {
     AUTO {
         @Override
-        public String toString() { return "Автопоиск перезентации"; }
+        public String toString() { return "Автопоиск презентации"; }
     },
     FULL{
         @Override
