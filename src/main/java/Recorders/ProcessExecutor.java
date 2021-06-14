@@ -34,6 +34,7 @@ public class ProcessExecutor {
                     process = processBuilder.start();
                     ResultStreamHandler res = new ResultStreamHandler(process.getInputStream());
                     res.run();
+//                    process.waitFor();
                     int exitCode = process.exitValue();
                     if (!(exitCode == 0 || exitCode == 1))
                         throw new IllegalStateException("Process " + setupSettings.getSetupSettings()[0] + "stopped with exitCode - " + exitCode);
@@ -68,11 +69,14 @@ public class ProcessExecutor {
         public void run() {
             try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
                 Pattern patter = Pattern.compile("Failed to capture image");
+                Pattern error = Pattern.compile("error");
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
-                    log.debug(line);
+                    log.info(line);
                     if (patter.matcher(line).find()) {
                         stop();
+                    } else if (error.matcher(line).find()) {
+                        log.error(line);
                     }
                 }
             } catch (Throwable t) {

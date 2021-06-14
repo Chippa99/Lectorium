@@ -7,7 +7,7 @@ public class LectoriumThreadExecutor {
     private static ExecutorService executor;
     public static ExecutorService getExecutor() {
         if (executor == null) {
-            executor = Executors.newSingleThreadExecutor();
+            executor = Executors.newFixedThreadPool(2);
         }
         return executor;
     }

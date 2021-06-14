@@ -14,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static Utils.RecordUtils.toUTF8;
+
 public class SystemInfo {
     private static final Logger log = LoggerFactory.getLogger(SystemInfo.class);
     private static final String FFMPEG_STRING = "ffmpeg";
@@ -73,7 +75,7 @@ public class SystemInfo {
             Matcher m = r.matcher(res.getInput());
             if (m.find()) {
                 log.info("Found microphone: [{}]", m.group(1));
-                return m.group(1);
+                return toUTF8(m.group(1));
             } else {
                 throw new IllegalArgumentException("Could not found microphone");
             }

@@ -1,28 +1,30 @@
+import static Utils.RecordUtils.toUTF8;
+
 public enum SourceType {
     AUTO {
         @Override
-        public String toString() { return "Автопоиск презентации"; }
+        public String toString() { return toUTF8("Автозахват презентации"); }
     },
     FULL{
         @Override
         public String toString() {
-            return "Полный экран";
+            return toUTF8("Полный экран");
         }
     },
     AREA{
         @Override
         public String toString() {
-            return "Область экрана";
+            return toUTF8("Область экрана");
         }
     },
     CAPTURE_FRAME{
         @Override
-        public String toString() { return "Захват окна"; }
+        public String toString() { return toUTF8("Захват окна"); }
     },
     PRESENTATION{
         @Override
         public String toString() {
-            return "Режим презентации";
+            return toUTF8("Режим презентации");
         }
     }
 }

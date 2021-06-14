@@ -22,15 +22,17 @@ import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 import static Utils.RecordUtils.getScreenSize;
+import static Utils.RecordUtils.toUTF8;
 
 public class Main extends JFrame {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
@@ -56,53 +58,49 @@ public class Main extends JFrame {
      */
     private void $$$setupUI$$$() {
         mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayoutManager(8, 3, new Insets(0, 0, 0, 0), -1, -1));
+        mainPanel.setLayout(new GridLayoutManager(7, 3, new Insets(0, 0, 0, 0), -1, -1));
         mainPanel.setOpaque(true);
         mainPanel.putClientProperty("html.disable", Boolean.FALSE);
         sourceType = new JComboBox();
         sourceType.setEditable(false);
-        mainPanel.add(sourceType, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(150, -1), new Dimension(150, -1), new Dimension(300, -1), 0, false));
-        final JLabel label1 = new JLabel();
-        label1.setAlignmentX(0.0f);
-        label1.setText("Источник записи");
-        label1.setVerticalAlignment(0);
-        mainPanel.add(label1, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        mainPanel.add(sourceType, new GridConstraints(0, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(150, -1), new Dimension(196, -1), new Dimension(349, -1), 0, false));
+        recordSourceText = new JLabel();
+        recordSourceText.setAlignmentX(0.0f);
+        recordSourceText.setText("Источник записи");
+        recordSourceText.setVerticalAlignment(0);
+        mainPanel.add(recordSourceText, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         presText = new JLabel();
         presText.setText("Доступные презентации");
         presText.setVisible(false);
-        mainPanel.add(presText, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        mainPanel.add(presText, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         presentationsList = new JComboBox();
         presentationsList.setEditable(true);
         presentationsList.setVisible(false);
-        mainPanel.add(presentationsList, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(150, -1), new Dimension(150, -1), new Dimension(300, -1), 0, false));
+        mainPanel.add(presentationsList, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(150, -1), new Dimension(150, -1), new Dimension(300, -1), 0, false));
         setUrlOnStreamRadioButton = new JRadioButton();
         setUrlOnStreamRadioButton.setText("Ввести ключ трансляции");
         setUrlOnStreamRadioButton.setVisible(false);
-        mainPanel.add(setUrlOnStreamRadioButton, new GridConstraints(5, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        mainPanel.add(setUrlOnStreamRadioButton, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         createStreamRadioButton = new JRadioButton();
         createStreamRadioButton.setText("Создать трансляцию");
         createStreamRadioButton.setVisible(false);
-        mainPanel.add(createStreamRadioButton, new GridConstraints(6, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        mainPanel.add(createStreamRadioButton, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         start = new JButton();
         start.setText("Начать запись");
-        mainPanel.add(start, new GridConstraints(5, 2, 1, 1, GridConstraints.ANCHOR_SOUTH, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(120, -1), new Dimension(120, -1), null, 0, false));
-        stop = new JButton();
-        stop.setEnabled(false);
-        stop.setText("Остановить");
-        mainPanel.add(stop, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_SOUTH, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(120, -1), new Dimension(120, -1), null, 0, false));
+        mainPanel.add(start, new GridConstraints(4, 1, 1, 2, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(196, -1), new Dimension(196, -1), null, 0, false));
         final JSeparator separator1 = new JSeparator();
-        mainPanel.add(separator1, new GridConstraints(3, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        mainPanel.add(separator1, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(1, 5, new Insets(0, 0, 0, 0), -1, -1));
-        mainPanel.add(panel1, new GridConstraints(7, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        mainPanel.add(panel1, new GridConstraints(6, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         panel1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createRaisedBevelBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-        final JLabel label2 = new JLabel();
-        label2.setRequestFocusEnabled(false);
-        label2.setText("Трансляция");
-        panel1.add(label2, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
-        final JLabel label3 = new JLabel();
-        label3.setText("Запись");
-        panel1.add(label3, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        intTrans = new JLabel();
+        intTrans.setRequestFocusEnabled(false);
+        intTrans.setText("Трансляция");
+        panel1.add(intTrans, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        intRec = new JLabel();
+        intRec.setText("Запись");
+        panel1.add(intRec, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         final Spacer spacer1 = new Spacer();
         panel1.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         fileIndicator = new JRadioButton();
@@ -117,21 +115,26 @@ public class Main extends JFrame {
         panel1.add(streamIndicator, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         youtubeCheckBox = new JCheckBox();
         youtubeCheckBox.setText("YouTube трансляция");
-        mainPanel.add(youtubeCheckBox, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mainPanel.add(youtubeCheckBox, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         fileCheckBox = new JCheckBox();
         fileCheckBox.setText("Запись в файл");
-        mainPanel.add(fileCheckBox, new GridConstraints(4, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mainPanel.add(fileCheckBox, new GridConstraints(3, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         pathToPresentation = new JButton();
         pathToPresentation.setActionCommand("Своя презентация");
         Font pathToPresentationFont = this.$$$getFont$$$(null, -1, -1, pathToPresentation.getFont());
         if (pathToPresentationFont != null) pathToPresentation.setFont(pathToPresentationFont);
         pathToPresentation.setHideActionText(false);
+        pathToPresentation.setHorizontalAlignment(0);
         pathToPresentation.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/ocean/directory.gif")));
         pathToPresentation.setIconTextGap(3);
-        pathToPresentation.setLabel("Своя презентация");
-        pathToPresentation.setText("Своя презентация");
+        pathToPresentation.setLabel("");
+        pathToPresentation.setText("");
         pathToPresentation.setVisible(false);
-        mainPanel.add(pathToPresentation, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mainPanel.add(pathToPresentation, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 26), new Dimension(33, 26), new Dimension(33, -1), 0, false));
+        stop = new JButton();
+        stop.setEnabled(false);
+        stop.setText("Остановить");
+        mainPanel.add(stop, new GridConstraints(5, 1, 1, 2, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(196, -1), new Dimension(196, -1), null, 0, false));
     }
 
     /**
@@ -183,9 +186,12 @@ public class Main extends JFrame {
     private JButton pathToPresentation;
     private JRadioButton fileIndicator;
     private JRadioButton streamIndicator;
+    private JLabel recordSourceText;
+    private JLabel intRec;
+    private JLabel intTrans;
     private JLabel slideLable;
 
-    public Main() {
+    public Main() throws UnsupportedEncodingException {
         BasicConfigurator.configure();
         setTitle("Лекттоп");
         log.info("Start tool");
@@ -241,13 +247,18 @@ public class Main extends JFrame {
                 } else {
                     recordFilePath = null;
                 }
-                start.setEnabled(youtubeCheckBox.isSelected() || fileCheckBox.isSelected());
+                start.setEnabled(isStartEnable());
             }
         });
 
         youtubeCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (youtubeCheckBox.isSelected()) {
+                    setSize(getWidth() + 28, getHeight());
+                } else {
+                    setSize(getWidth() - 28, getHeight());
+                }
                 setUrlOnStreamRadioButton.setVisible(!setUrlOnStreamRadioButton.isVisible());
                 createStreamRadioButton.setVisible(!createStreamRadioButton.isVisible());
                 if (!setUrlOnStreamRadioButton.isVisible()) {
@@ -255,7 +266,7 @@ public class Main extends JFrame {
                 }
                 //TODO
                 // String url = "rtmp://a.rtmp.youtube.com/live2/2zre-4z94-bxbf-v2b4-8ps9";
-                start.setEnabled(youtubeCheckBox.isSelected() || fileCheckBox.isSelected());
+                start.setEnabled(isStartEnable());
             }
         });
         setUrlOnStreamRadioButton.addActionListener(new ActionListener() {
@@ -290,11 +301,11 @@ public class Main extends JFrame {
         sourceType.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setSize(390, 210);
+                setSize(getWidth(), 210);
                 presentationsList.setVisible(false);
                 presText.setVisible(false);
                 FOUND_PRESENTATION = false;
-              //  start.setEnabled(true);
+                //  start.setEnabled(true);
                 pathToPresentation.setVisible(false);
 
                 Object source_type = sourceType.getSelectedItem();
@@ -362,11 +373,10 @@ public class Main extends JFrame {
                         }
                     });
                     transFrame.show();
-                    pack();
                 } else if (source_type.equals(SourceType.CAPTURE_FRAME)) {
                     selectedCapturedFrame();
                 } else if (source_type.equals(SourceType.PRESENTATION)) {
-                    setSize(390, 280);
+                    setSize(getWidth(), getHeight() + 30);
                     recordSource.setCaptureFrame("Presentation");
                     presentationsList.setVisible(true);
                     presText.setVisible(true);
@@ -374,12 +384,13 @@ public class Main extends JFrame {
                 } else if (source_type.equals(SourceType.AUTO)) {
                     startFoundPresentation();
                 }
+                start.setEnabled(isStartEnable());
             }
         });
         pathToPresentation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Path presentationFolder = createFileChooser("Выберите папку с презентацией", PATH_TO_PRESENTATIONS);
+                Path presentationFolder = createFileChooser(toUTF8("Выберите папку с презентацией"), PATH_TO_PRESENTATIONS);
                 presentationController = new SlideController(presentationFolder);
                 refreshPresentationFolder();
             }
@@ -391,6 +402,11 @@ public class Main extends JFrame {
         setMinimumSize(new Dimension(100, 100));
         setSize(390, 210);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private boolean isStartEnable() {
+        return (youtubeCheckBox.isSelected() || fileCheckBox.isSelected())
+                && !sourceType.getSelectedItem().equals(SourceType.AUTO);
     }
 
     private void refreshPresentationFolder() {
@@ -407,10 +423,10 @@ public class Main extends JFrame {
     private void createMenu() {
         Font font = new Font(mainPanel.getFont().toString(), Font.BOLD, 12);
         JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("Файл");
+        JMenu fileMenu = new JMenu(toUTF8("Файл"));
         fileMenu.setFont(font);
 
-        JMenuItem txtFileItem = new JMenuItem("Изменить");
+        JMenuItem txtFileItem = new JMenuItem(toUTF8("Изменить"));
         txtFileItem.setFont(font);
         txtFileItem.addActionListener(new ActionListener() {
             @Override
@@ -457,13 +473,16 @@ public class Main extends JFrame {
                             if (!(fileCheckBox.isSelected() || youtubeCheckBox.isSelected())) {
                                 RecordUtils.callNotificationFrame("Внимание !", "Перед началом записи презентации " +
                                         "выберите режимы работы в приложении");
+                            } else {
+                                RecordUtils.callNotificationFrame("Запись", "Лекттоп автоматически начал запись презентации");
+                                recordSource.setCaptureFrame(className);
+                                start.setEnabled(true);
+                                start.doClick();
+                                stop.setEnabled(true);
+                                start.setEnabled(false);
+                                FOUND_PRESENTATION = false;
+                                return;
                             }
-                            recordSource.setCaptureFrame(className);
-                            start.setEnabled(true);
-                            start.doClick();
-                            start.setEnabled(false);
-                            FOUND_PRESENTATION = false;
-                            return;
                         }
                         try {
                             Thread.sleep(4000);
@@ -579,9 +598,12 @@ public class Main extends JFrame {
     }
 
     private JFrame createTransparentFrame(Point loc, Dimension size) {
-        JFrame f = new JFrame("Select a screen area");
+        JFrame f = new JFrame("Выделите область экрана");
         TransparentFrame bg = new TransparentFrame(f);
         bg.setLayout(new BorderLayout());
+        bg.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.RED));
+        f.setUndecorated(true);
+        f.toFront();
         f.getContentPane().add("Center", bg);
         f.pack();
         f.setSize(size);
@@ -589,17 +611,11 @@ public class Main extends JFrame {
         f.setResizable(false);
         f.setAlwaysOnTop(true);
         f.show();
+        f.setExtendedState(MAXIMIZED_HORIZ);
         return f;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedEncodingException {
         new Main().show();
-    }
-
-    public void replaceExecutor(ProcessExecutor executor) {
-        executors.remove(executor);
-        executors.add(executor);
-
-        log.info("Add new record mode {} to records, size: {}", executor.getClass(), executors.size());
     }
 }

@@ -1,6 +1,7 @@
 package Utils;
 
 import java.awt.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,16 +37,9 @@ public class RecordUtils {
 
     public static void callNotificationFrame(String title, String message) {
         SystemTray tray = SystemTray.getSystemTray();
-
-        //If the icon is a file
         Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
-        //Alternative (if the icon is on the classpath):
-        //Image image = Toolkit.getDefaultToolkit().createImage(getClass().getResource("icon.png"));
-
         TrayIcon trayIcon = new TrayIcon(image, "Tray Demo");
-        //Let the system resize the image if needed
         trayIcon.setImageAutoSize(true);
-        //Set tooltip text for the tray icon
         trayIcon.setToolTip("System tray icon demo");
         try {
             tray.add(trayIcon);
@@ -54,5 +48,9 @@ public class RecordUtils {
         }
 
         trayIcon.displayMessage(title, message, TrayIcon.MessageType.INFO);
+    }
+
+    public static String toUTF8(String name) {
+        return new String(name.getBytes(), StandardCharsets.UTF_8);
     }
 }

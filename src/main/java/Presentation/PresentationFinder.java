@@ -10,7 +10,6 @@ public class PresentationFinder {
     public String find() {
         Map<String, String> names = WindowsInfo.findAllClassNames();
         if (names.containsKey(PRESENTATION_FRAME_CLASS_NAME)) {
-            RecordUtils.callNotificationFrame("Запись", "Лекториум автоматически начал запись презентации");
             return names.get(PRESENTATION_FRAME_CLASS_NAME);
         }
         return null;

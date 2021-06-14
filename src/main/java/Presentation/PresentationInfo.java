@@ -2,6 +2,8 @@ package Presentation;
 
 import java.nio.file.Path;
 
+import static Utils.RecordUtils.toUTF8;
+
 public class PresentationInfo {
     private final Path pathToPresentation;
     private final String name;
@@ -21,6 +23,6 @@ public class PresentationInfo {
 
     @Override
     public String toString() {
-        return name;
+        return toUTF8(name);
     }
 }
