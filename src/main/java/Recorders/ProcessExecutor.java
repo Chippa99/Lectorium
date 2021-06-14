@@ -15,10 +15,10 @@ import java.util.regex.Pattern;
 
 public class ProcessExecutor {
     private Process process;
-    private final Settings setupSettings;
+    private final String[] setupSettings;
     private static final Logger log = LoggerFactory.getLogger(ProcessExecutor.class);
 
-    public ProcessExecutor(Settings setupSettings) {
+    public ProcessExecutor(String[] setupSettings) {
         this.setupSettings = setupSettings;
     }
 
@@ -28,7 +28,7 @@ public class ProcessExecutor {
             public void run() {
                 try {
                     ProcessBuilder processBuilder = new ProcessBuilder();
-                    processBuilder.command(setupSettings.getSetupSettings());
+                    processBuilder.command(setupSettings);
                     processBuilder.redirectErrorStream(true);
                     log.info("Stream start");
                     process = processBuilder.start();
@@ -37,7 +37,7 @@ public class ProcessExecutor {
 //                    process.waitFor();
                     int exitCode = process.exitValue();
                     if (!(exitCode == 0 || exitCode == 1))
-                        throw new IllegalStateException("Process " + setupSettings.getSetupSettings()[0] + "stopped with exitCode - " + exitCode);
+                        throw new IllegalStateException("Process " + setupSettings[0] + "stopped with exitCode - " + exitCode);
                     log.info("Stream stop");
                 } catch (Exception e) {
                     log.error(e.toString());

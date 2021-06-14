@@ -7,23 +7,17 @@ public class ScreenAreaSettings extends AbstractSettings {
 //            "|-s|%s|-i|desktop|-probesize|10M|-f|dshow|-i|audio=%s|-c:v|h264|-r|%s|-preset|%s|-tune|zerolatency" +
 //            "|-crf|%s|-pix_fmt|yuv420p|-b:v|%sk|-b:a|600k|-maxrate|10000k|-minrate|4500k|-f|flv|%s";
     private final String source;
-    private final Rectangle frame;
 
     public ScreenAreaSettings(String source, Rectangle frame) {
+        super("-offset_x|" + frame.x + "|-offset_y|" + frame.y + "|-s|" + frame.width + "x" + frame.height, "desktop");
         this.source = source;
-        this.frame = frame;
     }
 
     @Override
-    public String[] getSetupSettings() {
-        String position = "-offset_x|" + frame.x + "|-offset_y|" + frame.y + "|-s|" + frame.width + "x" + frame.height;
-        String settings =
-                String.format(SETTINGS,
-                        systemInfo.getFfmpegPath(),
+    public String getSetupSettings() {
+        return String.format(DETAILED_SETTINGS,
                         1024,
                         buffer,
-                        position,
-                        "desktop",
                         systemInfo.getMicroName(),
                         fps,
                         preset,
@@ -31,6 +25,6 @@ public class ScreenAreaSettings extends AbstractSettings {
                         bitrate,
                         source
                 );
-        return settings.split(SEPARATOR);
+
     }
 }

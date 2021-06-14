@@ -55,7 +55,7 @@ public class SystemInfo {
         throw new IllegalArgumentException("Missing path to ffmpeg: [" + env + "]");
     }
 
-    public String foundMicrophone() {
+    private String foundMicrophone() {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();
             processBuilder.command(ffmpegPath + "/ffmpeg.exe", "-list_devices", "true", "-f", "dshow", "-i", "dummy");

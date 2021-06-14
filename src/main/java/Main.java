@@ -204,20 +204,17 @@ public class Main extends JFrame {
                         recordFilePath = RecordUtils.getFreeFileName(Paths.get("record.mp4").toAbsolutePath());
                         FOUND_PRESENTATION = false;
                         if (fileCheckBox.isSelected() && recordFilePath != null) {
-                            Settings settings = recordSource.getSetupSettings(recordFilePath.toString());
-                            settings.buildToFile();
-                            executors.add(new ProcessExecutor(settings));
+                            recordSource.addFileSettings(recordFilePath.toString());
                             fileIndicator.setSelected(true);
                         }
                         if (youtubeCheckBox.isSelected() && input != null) {
-                            Settings settings = recordSource.getSetupSettings(input);
-                            settings.buildToStream();
-                            executors.add(new ProcessExecutor(settings));
+                            recordSource.addStreamSettings(input);
                             streamIndicator.setSelected(true);
                         }
                         if (sourceType.getSelectedItem().equals(SourceType.PRESENTATION)) {
                             createPresentationFrame();
                         }
+                        executors.add(new ProcessExecutor(recordSource.buildSettings()));
                         executors.forEach(ProcessExecutor::start);
                         stop.setEnabled(true);
                         start.setEnabled(false);
@@ -229,6 +226,7 @@ public class Main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!executors.isEmpty()) {
+                    recordSource.clearSettings();
                     recordFilePath = RecordUtils.getFreeFileName(recordFilePath.toAbsolutePath());
                     executors.forEach(ProcessExecutor::stop);
                     executors.clear();
