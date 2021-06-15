@@ -36,7 +36,7 @@ public class BroadcastCreator {
             broadcastSnippet.setTitle(title);
 
             LiveBroadcastStatus status = new LiveBroadcastStatus();
-            status.setPrivacyStatus("private");
+            status.setPrivacyStatus("public");
             LiveBroadcastContentDetails details = new LiveBroadcastContentDetails();
             details.setEnableAutoStart(true);
             details.set("enableAutoStop", "true");

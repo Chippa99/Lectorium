@@ -191,7 +191,7 @@ public class Main extends JFrame {
     private JLabel intTrans;
     private JLabel slideLable;
 
-    public Main() throws UnsupportedEncodingException {
+    public Main() {
         BasicConfigurator.configure();
         setTitle("Лекттоп");
         log.info("Start tool");
@@ -510,8 +510,8 @@ public class Main extends JFrame {
                 String winName = WindowsInfo.findFirstFrame();
                 int res = JOptionPane.showConfirmDialog(
                         mainPanel,
-                        "Do you want to capture a window - " + winName + " ?",
-                        "Capture window selection",
+                        "Вы хотите захватить окно - " + winName + " ?",
+                        "Захват окна",
                         JOptionPane.YES_NO_CANCEL_OPTION
                 );
                 if (res == 0) {
@@ -613,7 +613,7 @@ public class Main extends JFrame {
         return f;
     }
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
+    public static void main(String[] args) {
         new Main().show();
     }
 }
